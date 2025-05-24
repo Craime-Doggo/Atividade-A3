@@ -35,6 +35,7 @@ public class Master extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal");
+        setResizable(false);
 
         MenuCadastro.setText("Cadastro");
 
@@ -47,6 +48,11 @@ public class Master extends javax.swing.JFrame {
         MenuCadastro.add(CadastroProduto);
 
         CadastroCategoria.setText("Cadastro de Categorias");
+        CadastroCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CadastroCategoriaActionPerformed(evt);
+            }
+        });
         MenuCadastro.add(CadastroCategoria);
 
         MenuBar.add(MenuCadastro);
@@ -54,6 +60,11 @@ public class Master extends javax.swing.JFrame {
         MenuConsultaEdicao.setText("Consulta/Edição");
 
         ConsultaProduto.setText("Consulta de Produtos");
+        ConsultaProduto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConsultaProdutoActionPerformed(evt);
+            }
+        });
         MenuConsultaEdicao.add(ConsultaProduto);
 
         ConsultaCategoria.setText("Consulta de Categorias");
@@ -91,6 +102,16 @@ public class Master extends javax.swing.JFrame {
         objeto.setVisible(true);
     }//GEN-LAST:event_CadastroProdutoActionPerformed
 
+    private void CadastroCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroCategoriaActionPerformed
+        CadastroCategoria objeto = new CadastroCategoria();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_CadastroCategoriaActionPerformed
+
+    private void ConsultaProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaProdutoActionPerformed
+        ConsultaProduto objeto = new ConsultaProduto();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_ConsultaProdutoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -116,6 +137,12 @@ public class Master extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Master.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 

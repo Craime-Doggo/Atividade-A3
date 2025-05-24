@@ -5,8 +5,9 @@
         <group>
             <file>file:/C:/Users/Gabriel/Documents/Projetos/Java/SCE/src/principal/Principal.java</file>
             <file>file:/C:/Users/Gabriel/Documents/Projetos/Java/SCE/src/visao/Master.java</file>
-            <file>file:/C:/Users/Gabriel/Documents/Projetos/Java/SCE/src/visao/CadastroProduto.java</file>
             <file>file:/C:/Users/Gabriel/Documents/Projetos/Java/SCE/src/visao/CadastroCategoria.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/Projetos/Java/SCE/src/visao/CadastroProduto.java</file>
+            <file>file:/C:/Users/Gabriel/Documents/Projetos/Java/SCE/src/visao/ConsultaProduto.java</file>
         </group>
     </open-files>
 </project-private>
