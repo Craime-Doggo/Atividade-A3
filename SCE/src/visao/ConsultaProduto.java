@@ -49,7 +49,25 @@ public class ConsultaProduto extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         campoBusca = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        Buscar = new javax.swing.JButton();
+        Minimo = new javax.swing.JLabel();
+        Maximo = new javax.swing.JLabel();
+        Unidade = new javax.swing.JLabel();
+        Categoria = new javax.swing.JLabel();
+        TextPreco = new javax.swing.JFormattedTextField();
+        TextUnidade = new javax.swing.JComboBox<>();
+        TextEstoque = new javax.swing.JTextField();
+        TextMinimo = new javax.swing.JTextField();
+        TextMaximo = new javax.swing.JTextField();
+        Nome = new javax.swing.JLabel();
+        TextNome = new javax.swing.JTextField();
+        Preco = new javax.swing.JLabel();
+        TextCategoria = new javax.swing.JComboBox<>();
+        Estoque = new javax.swing.JLabel();
+        Editar = new javax.swing.JButton();
+        Excluir = new javax.swing.JButton();
+        Recarregar = new javax.swing.JButton();
+        Cancelar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta/Edição de Produtos");
@@ -81,7 +99,44 @@ public class ConsultaProduto extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setText("Buscar");
+        Buscar.setText("Buscar");
+
+        Minimo.setText("Quantidade Mínima");
+
+        Maximo.setText("Quantidade Máxima");
+
+        Unidade.setText("Unidade");
+
+        Categoria.setText("Categoria");
+
+        TextUnidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione...\"", "Item 1", "Item 2" }));
+        TextUnidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextUnidadeActionPerformed(evt);
+            }
+        });
+
+        Nome.setText("Nome do Produto:");
+
+        TextNome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextNomeActionPerformed(evt);
+            }
+        });
+
+        Preco.setText("Preço Unitário");
+
+        TextCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione...\"", "Item 1", "Item 2" }));
+
+        Estoque.setText("Quantidade Estoque");
+
+        Editar.setText("Editar");
+
+        Excluir.setText("Excluir");
+
+        Recarregar.setText("Recarregar");
+
+        Cancelar.setText("Cancelar");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -92,9 +147,35 @@ public class ConsultaProduto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 538, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(campoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(Preco)
+                                    .addComponent(Unidade)
+                                    .addComponent(Nome)
+                                    .addComponent(Estoque)
+                                    .addComponent(Minimo)
+                                    .addComponent(Maximo)
+                                    .addComponent(Categoria))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(TextPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TextUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TextEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TextMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TextMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TextCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(TextNome))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(Recarregar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Excluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Editar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(Cancelar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(campoBusca)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(Buscar, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -103,9 +184,42 @@ public class ConsultaProduto extends javax.swing.JFrame {
                 .addGap(19, 19, 19)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(campoBusca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(Buscar))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(Nome)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(TextNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Editar))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Preco)
+                    .addComponent(TextPreco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Unidade)
+                    .addComponent(TextUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Excluir))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Estoque)
+                    .addComponent(TextEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Minimo)
+                    .addComponent(TextMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Recarregar))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Maximo)
+                    .addComponent(TextMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(Categoria)
+                    .addComponent(TextCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Cancelar))
                 .addContainerGap())
         );
 
@@ -115,6 +229,14 @@ public class ConsultaProduto extends javax.swing.JFrame {
     private void campoBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoBuscaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_campoBuscaActionPerformed
+
+    private void TextUnidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextUnidadeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextUnidadeActionPerformed
+
+    private void TextNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextNomeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextNomeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -152,8 +274,26 @@ public class ConsultaProduto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton Buscar;
+    private javax.swing.JButton Cancelar;
+    private javax.swing.JLabel Categoria;
+    private javax.swing.JButton Editar;
+    private javax.swing.JLabel Estoque;
+    private javax.swing.JButton Excluir;
+    private javax.swing.JLabel Maximo;
+    private javax.swing.JLabel Minimo;
+    private javax.swing.JLabel Nome;
+    private javax.swing.JLabel Preco;
+    private javax.swing.JButton Recarregar;
+    private javax.swing.JComboBox<String> TextCategoria;
+    private javax.swing.JTextField TextEstoque;
+    private javax.swing.JTextField TextMaximo;
+    private javax.swing.JTextField TextMinimo;
+    private javax.swing.JTextField TextNome;
+    private javax.swing.JFormattedTextField TextPreco;
+    private javax.swing.JComboBox<String> TextUnidade;
+    private javax.swing.JLabel Unidade;
     private javax.swing.JTextField campoBusca;
-    private javax.swing.JButton jButton1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables

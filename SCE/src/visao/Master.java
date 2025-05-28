@@ -31,6 +31,7 @@ public class Master extends javax.swing.JFrame {
         ConsultaCategoria = new javax.swing.JMenuItem();
         MenuReajuste = new javax.swing.JMenu();
         MenuRelatorio = new javax.swing.JMenu();
+        Relatorio = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -68,6 +69,11 @@ public class Master extends javax.swing.JFrame {
         MenuConsultaEdicao.add(ConsultaProduto);
 
         ConsultaCategoria.setText("Consulta de Categorias");
+        ConsultaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConsultaCategoriaActionPerformed(evt);
+            }
+        });
         MenuConsultaEdicao.add(ConsultaCategoria);
 
         MenuBar.add(MenuConsultaEdicao);
@@ -76,6 +82,20 @@ public class Master extends javax.swing.JFrame {
         MenuBar.add(MenuReajuste);
 
         MenuRelatorio.setText("Relatórios");
+        MenuRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuRelatorioActionPerformed(evt);
+            }
+        });
+
+        Relatorio.setText("Relatórios");
+        Relatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RelatorioActionPerformed(evt);
+            }
+        });
+        MenuRelatorio.add(Relatorio);
+
         MenuBar.add(MenuRelatorio);
 
         jMenu1.setText("Movimentação");
@@ -111,6 +131,21 @@ public class Master extends javax.swing.JFrame {
         ConsultaProduto objeto = new ConsultaProduto();
         objeto.setVisible(true);
     }//GEN-LAST:event_ConsultaProdutoActionPerformed
+
+    private void ConsultaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaCategoriaActionPerformed
+        ConsultaCategoria objeto = new ConsultaCategoria();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_ConsultaCategoriaActionPerformed
+
+    private void MenuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRelatorioActionPerformed
+        Relatorio objeto = new Relatorio();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_MenuRelatorioActionPerformed
+
+    private void RelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RelatorioActionPerformed
+        Relatorio objeto = new Relatorio();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_RelatorioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -164,6 +199,7 @@ public class Master extends javax.swing.JFrame {
     private javax.swing.JMenu MenuConsultaEdicao;
     private javax.swing.JMenu MenuReajuste;
     private javax.swing.JMenu MenuRelatorio;
+    private javax.swing.JMenuItem Relatorio;
     private javax.swing.JMenu jMenu1;
     // End of variables declaration//GEN-END:variables
 }
