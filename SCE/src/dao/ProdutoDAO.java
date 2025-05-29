@@ -43,6 +43,31 @@ return null;
 System.out.println("Nao foi possivel conectar...");
 return null;
 }
+
+
+// Retorna a Lista de Alunos(objetos)
+public ArrayList<Aluno> getMinhaLista() {
+minhaLista.clear(); // Limpa nosso ArrayList
+try {
+Statement stmt = this.getConexao().createStatement();
+ResultSet res = stmt.executeQuery("SELECT * FROM tb_alunos");
+while (res.next()) {
+int id = res.getInt("id");
+String nome = res.getString("nome");
+int idade = res.getInt("idade");
+String curso = res.getString("curso");
+int fase = res.getInt("fase");
+Aluno objeto = new Aluno(id, nome, idade, curso, fase);
+minhaLista.add(objeto);
+
+
+
+res.close();
+stmt.close();
+} catch (SQLException ex) {
+}
+return minhaLista;
+}
     **/
     
 }
