@@ -109,9 +109,15 @@ throw new RuntimeException(erro);
 }
 
 
-
-
 PEGAR AS INFORMACOES ACIMA E EDITAR 
+O que fazer:
+- Criar CategoriaDao e produtoDao
+- Insert de produtos e categoria
+- set true and false movimentacao
+- Usuario e senha do mysql pra admin(pros 2)
+- 
+
+
     **/
     
 }
