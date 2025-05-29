@@ -68,6 +68,31 @@ stmt.close();
 }
 return minhaLista;
 }
+
+
+//Carrega um aluno pelo ID
+public Aluno carregaAluno(int id) {
+Aluno objeto = new Aluno();
+objeto.setId(id);
+try {
+Statement stmt = this.getConexao().createStatement();
+ResultSet res = stmt.executeQuery("SELECT * FROM tb_alunos WHERE id = " + id);
+res.next();
+objeto.setNome(res.getString("nome"));
+objeto.setIdade(res.getInt("idade"));
+objeto.setCurso(res.getString("curso"));
+objeto.setFase(res.getInt("fase"));
+stmt.close();
+} catch (SQLException erro) {
+System.out.println("Erro:" + erro);
+}
+return objeto;
+}
+
+
+
+
+PEGAR AS INFORMACOES ACIMA E EDITAR 
     **/
     
 }
