@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
+import produtos.Categoria;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -15,10 +16,10 @@ import visao.CadastroCategoria;
  *
  * @author parto
  */
-public class CategoriaDAO extends CadastroCategoria {
-    public ArrayList <CadastroCategoria> minhaLista = new ArrayList();
+public class CategoriaDAO {
+    public ArrayList <Categoria> minhaLista = new ArrayList();
 
-    public ArrayList <CadastroCategoria> getMinhaLista () {
+    public ArrayList <Categoria> getMinhaLista () {
         minhaLista.clear();
         
         try {
@@ -26,11 +27,12 @@ public class CategoriaDAO extends CadastroCategoria {
             ResultSet res = stmt.executeQuery ("SELECT * FROM tb_categoria");
             while (res.next()) {
                 
-                int id = res.getInt("id_categoria");
+                int id_categoria = res.getInt("id_categoria");
+                String nome_categoria = res.getString("nome_categoria");
                 String tamanho = res.getString("Tamanho");
                 String embalagem = res.getString("Embalagem");
                 
-                Categoria objeto = new Categoria (id, tamanho, embalagem);
+                Categoria objeto = new Categoria (id_categoria, nome_categoria, tamanho, embalagem);
                 
                 minhaLista.add(objeto);
                 }
@@ -54,7 +56,7 @@ public class CategoriaDAO extends CadastroCategoria {
             }
             return maiorID;
         
-            public Connection getConexao() {
+            public Connection getConexao(){
                 
                 Connection connection = null;
                 try {
@@ -89,8 +91,9 @@ public class CategoriaDAO extends CadastroCategoria {
                 try {
                     PreparedStatement stmt = this.getConexao().prepareStatement(sql);
                     
-                    stmt.setInt(1, objeto.getId());
-                    stmt.getString(2, objeto.getTamanho());
+                    stmt.setInt(1, objeto.getId_categoria());
+                    stmt.setString(2, objeto.getNome_categoria());
+                    stmt.setString(3, objeto.getTamanho());
                     stmt.setString(4, objeto.getEmbalagem());
                     
                     stmt.execute();
@@ -118,9 +121,10 @@ public class CategoriaDAO extends CadastroCategoria {
                 
                 try {
                     PreparedStatement stmt = this.getConexao().prepareStatement(sql);
-                    stmt.setInt(1, objeto.getId());
-                    stmt.setString(2, objeto.getTamanho());
-                    stmt.setString(3, objeto.getEmbalagem());
+                    stmt.setInt(1, objeto.getId_categoria());
+                    stmt.setString(2, objeto.getNome_categoria());
+                    stmt.setString(3, objeto.getTamanho());
+                    stmt.setString(4, objeto.getEmbalagem());
                     
                     stmt.execute();
                     stmt.close();
@@ -134,7 +138,7 @@ public class CategoriaDAO extends CadastroCategoria {
             } 
             public Categoria carregaCategoria (int id ) {
                 Categoria objeto = new Categoria ();
-                objeto.setId (id);
+                objeto.setId_categoria (id);
                 
                 try {
                     Statement stmt = this.getConexao().createStatement();
@@ -142,7 +146,8 @@ public class CategoriaDAO extends CadastroCategoria {
                     ResultSet res = stmt.executeQuery("SELECT * FROM tb_categoria WHERE id = " + id);
                     res.next();
                     
-                    objeto.setId (res.getInt("id"));
+                    objeto.setId_categoria (res.getInt("id"));
+                    objeto.setNome_categoria (res.getString("Nome"));
                     objeto.setTamanho (res.getString("Tamanho"));
                     objeto.setEmbalagem (res.getString("Embalagem"));
                     
