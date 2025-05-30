@@ -67,6 +67,7 @@ public class Relatorio extends javax.swing.JFrame {
         tabelaRelatorio = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Relatórios");
 
         comboRelatorio.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Lista de Preços", "Balanço Financeiro", "Abaixo da Quantidade Mínima", "Abaixo da Quantidade Máxima", "Quantidade de Produtos por Categoria" }));
 
