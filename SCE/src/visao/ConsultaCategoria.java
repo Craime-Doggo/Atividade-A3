@@ -65,7 +65,7 @@ public class ConsultaCategoria extends javax.swing.JFrame {
         Excluir = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta de Categorias");
 
         tabelaCategorias.setModel(new javax.swing.table.DefaultTableModel(
