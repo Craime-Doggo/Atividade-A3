@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import visao.CadastroCategoria;
+
 /**
  *
  * @author parto
@@ -66,7 +66,7 @@ public class CategoriaDAO {
                     String server = "admin";
                     String database = "database.com"; //INCLUIR FUTURO NOME DO DATABASE
                     String url = "jdbc:mysql://" + server + ":3306/" + database + "?useTimezone=true&serverTimezone=UTC";
-                    String user = "admin";
+                    String user = "root";
                     String password = "admin";
                     
                     connection = DriverManager.getConnection (url, user, password);
