@@ -138,12 +138,12 @@
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="7" rowCount="4">
                 <Column editable="true" title="Nome" type="java.lang.String"/>
-                <Column editable="true" title="Pre&#xe7;o" type="java.lang.Object"/>
+                <Column editable="true" title="Pre&#xe7;o" type="java.lang.Double"/>
                 <Column editable="true" title="Unidade" type="java.lang.String"/>
-                <Column editable="true" title="Estoque" type="java.lang.Object"/>
-                <Column editable="true" title="Est. M&#xed;n." type="java.lang.Object"/>
-                <Column editable="true" title="Est. M&#xe1;x." type="java.lang.Object"/>
-                <Column editable="true" title="Categoria" type="java.lang.Object"/>
+                <Column editable="true" title="Estoque" type="java.lang.Integer"/>
+                <Column editable="true" title="Est. M&#xed;n." type="java.lang.Integer"/>
+                <Column editable="true" title="Est. M&#xe1;x." type="java.lang.Integer"/>
+                <Column editable="true" title="Categoria" type="java.lang.String"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
