@@ -46,9 +46,13 @@ public class ProdutoDAO {
                 int Quantidade_estoque = res.getInt("Quantidade_estoque");
                 int Estoque_minimo = res.getInt("Estoque_minimo");
                 int Estoque_maximo = res.getInt("Estoque_maximo");
+                int id_categoria = res.getInt("id_categoria");
+                String nome_categoria = res.getString("nome_categoria");
+                String tamanho = res.getString("tamanho");
+                String embalagem = res.getString("embalagem");
   
                 
-                Produto objeto = new Produto (Id, Nome, Preco, Unidade, Quantidade_estoque, Estoque_minimo, Estoque_maximo);
+                Produto objeto = new Produto (Id, Nome, Preco, Unidade, Quantidade_estoque, Estoque_minimo, Estoque_maximo, id_categoria, nome_categoria, tamanho, embalagem);
                 
                 minhaLista.add(objeto);
                 }

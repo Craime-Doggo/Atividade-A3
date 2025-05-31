@@ -17,10 +17,10 @@ public class Produto extends Categoria{
     private ProdutoDAO dao;
     
     public Produto() {
-    this(0, "", 0, "", 0, 0, 0);
+    this(0, "", 0, "", 0, 0, 0, 0, "", "", "");
     }
 
-    public Produto(int Id, String Nome, double Preco, String Unidade, int Quantidade_estoque, int Estoque_minimo, int Estoque_maximo) {
+    public Produto(int Id, String Nome, double Preco, String Unidade, int Quantidade_estoque, int Estoque_minimo, int Estoque_maximo, int id_categoria, String nome_categoria, String tamanho, String embalagem) {
         super(id_categoria, nome_categoria, tamanho, embalagem);
         this.Id = Id;
         this.Nome = Nome;
