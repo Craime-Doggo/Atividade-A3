@@ -30,6 +30,14 @@ import produtos.Produto;
  */
 public class ProdutoDAO {
     public ArrayList <Produto> minhaLista = new ArrayList();
+    private String user_check;
+    private String pass_check;
+    
+    public ProdutoDAO(String user, String password) {
+        this.user_check = user;
+        this.pass_check = password;
+    }
+    
 
     public ArrayList <Produto> getMinhaLista () {
         minhaLista.clear();
@@ -75,6 +83,7 @@ public class ProdutoDAO {
                 System.out.println("ERRO: " + ex);
             }
             return maiorID;
+        }
             
             // Conexão com o Banco de Dados 
         
@@ -88,8 +97,8 @@ public class ProdutoDAO {
                     String server = "admin";
                     String database = "database.com"; //INCLUIR FUTURO NOME DO DATABASE
                     String url = "jdbc:mysql://" + server + ":3306/" + database + "?useTimezone=true&serverTimezone=UTC";
-                    String user = "admin";
-                    String password = "admin";
+                    String user = user_check;
+                    String password = pass_check;
                     
                     connection = DriverManager.getConnection (url, user, password);
                     
