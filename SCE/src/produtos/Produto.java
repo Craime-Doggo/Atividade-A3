@@ -4,9 +4,6 @@ import dao.ProdutoDAO;
 
 public class Produto extends Categoria{
 
-    public void setEstoque_maximo(int Estoque_maximo) {
-        this.Estoque_maximo = Estoque_maximo;
-    }
     private int Id;
     private String Nome;
     private double Preco;
@@ -17,7 +14,11 @@ public class Produto extends Categoria{
     private ProdutoDAO dao;
     
     public Produto() {
-    this(0, "", 0, "", 0, 0, 0, 0, "", "", "");
+    this(0, "", 0, "", 0, 0, 0, 0, "", "", "", "root", "admin");
+    }
+    
+    public Produto(String user, String password) {
+    this(0, "", 0, "", 0, 0, 0, 0, "", "", "", user, password);
     }
 
     public Produto(int Id, String Nome, double Preco, String Unidade, int Quantidade_estoque, int Estoque_minimo, int Estoque_maximo, int id_categoria, String nome_categoria, String tamanho, String embalagem) {
@@ -29,7 +30,20 @@ public class Produto extends Categoria{
         this.Quantidade_estoque = Quantidade_estoque;
         this.Estoque_minimo = Estoque_minimo;
         this.Estoque_maximo = Estoque_maximo;
-        this.dao = new ProdutoDAO();
+        this.dao = new ProdutoDAO("root", "admin");
+    }
+    
+    public Produto(int Id, String Nome, double Preco, String Unidade, int Quantidade_estoque, int Estoque_minimo, int Estoque_maximo, int id_categoria, String nome_categoria, String tamanho, String embalagem,
+                   String user, String password) {
+        super(id_categoria, nome_categoria, tamanho, embalagem);
+        this.Id = Id;
+        this.Nome = Nome;
+        this.Preco = Preco;
+        this.Unidade = Unidade;
+        this.Quantidade_estoque = Quantidade_estoque;
+        this.Estoque_minimo = Estoque_minimo;
+        this.Estoque_maximo = Estoque_maximo;
+        this.dao = new ProdutoDAO(user, password);
     }
     
     /**
@@ -123,6 +137,9 @@ public class Produto extends Categoria{
         return Estoque_maximo;
     }
 
+    public void setEstoque_maximo(int Estoque_maximo) {
+        this.Estoque_maximo = Estoque_maximo;
+    }
     /**
      * @param Estoque_maximo the Estoque_maximo to set
      */
