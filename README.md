@@ -1,4 +1,3 @@
 # Atividade-A3
-Aqui está o começo
-teste teste
+Projeto da faculdade UNISUL, um programa de Controle de Estoque. Feito em Java e conectado com o mySQL. 
 
