@@ -49,7 +49,7 @@ public class ProdutoDAO {
                 
                 int Id = res.getInt("Id_produto");
                 String Nome = res.getString("Nome_produto");
-                double Preco = res.getDouble("Preco_produto");
+                double Preco = res.getDouble("Preco_produto");  
                 String Unidade = res.getString("Unidade_produto");
                 int Quantidade_estoque = res.getInt("Quantidade_estoque");
                 int Estoque_minimo = res.getInt("Estoque_minimo");
