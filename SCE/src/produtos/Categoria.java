@@ -10,16 +10,23 @@ public class Categoria {
     private CategoriaDAO dao;
    
     public Categoria() {
-    this(0, "", "", "");
+        this("root", "admin");
     }
-    
-    public Categoria (int id_categoria, String nome_categoria, String Tamanho, String Embalagem){
-        
+
+    public Categoria(String user, String password) {
+        this(0, "", "", "", user, password);
+    }
+
+    public Categoria(int id_categoria, String nome_categoria, String tamanho, String embalagem) {
+        this(id_categoria, nome_categoria, tamanho, embalagem, "root", "admin");
+    }
+
+    public Categoria(int id_categoria, String nome_categoria, String tamanho, String embalagem, String user, String password) {
         this.id_categoria = id_categoria;
         this.nome_categoria = nome_categoria;
         this.tamanho = tamanho;
         this.embalagem = embalagem;
-        this.dao = new CategoriaDAO();
+        this.dao = new CategoriaDAO(user, password);
     }
     
     

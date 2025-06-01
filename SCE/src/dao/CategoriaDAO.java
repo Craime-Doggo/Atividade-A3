@@ -18,6 +18,13 @@ import visao.CadastroCategoria;
  */
 public class CategoriaDAO {
     public ArrayList <Categoria> minhaLista = new ArrayList();
+    private String user_check;
+    private String pass_check;
+    
+    public CategoriaDAO(String user, String password) {
+        this.user_check = user;
+        this.pass_check = password;
+    }
 
     public ArrayList <Categoria> getMinhaLista () {
         minhaLista.clear();
@@ -55,6 +62,7 @@ public class CategoriaDAO {
                 System.out.println("ERRO: " + ex);
             }
             return maiorID;
+        }
         
             public Connection getConexao(){
                 
@@ -63,11 +71,11 @@ public class CategoriaDAO {
                     String driver = "com.mysql.cj.jdbc.Driver";
                     Class.forName(driver);
                     
-                    String server = "admin";
-                    String database = "database.com"; //INCLUIR FUTURO NOME DO DATABASE
+                    String server = "localhost";              // Endereço do servidor MySQL (localhost = sua máquina)
+                    String database = "estoque";            // Nome do banco
                     String url = "jdbc:mysql://" + server + ":3306/" + database + "?useTimezone=true&serverTimezone=UTC";
-                    String user = "admin";
-                    String password = "admin";
+                    String user = user_check;
+                    String password = pass_check;
                     
                     connection = DriverManager.getConnection (url, user, password);
                     

@@ -14,11 +14,11 @@ public class Produto extends Categoria{
     private ProdutoDAO dao;
     
     public Produto() {
-    this(0, "", 0, "", 0, 0, 0, 0, "", "", "", "root", "admin");
+        this("root", "admin");
     }
-    
+
     public Produto(String user, String password) {
-    this(0, "", 0, "", 0, 0, 0, 0, "", "", "", user, password);
+        this(0, "", 0, "", 0, 0, 0, 0, "", "", "", user, password);
     }
 
     public Produto(int Id, String Nome, double Preco, String Unidade, int Quantidade_estoque, int Estoque_minimo, int Estoque_maximo, int id_categoria, String nome_categoria, String tamanho, String embalagem) {
