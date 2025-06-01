@@ -30,8 +30,11 @@ public class Master extends javax.swing.JFrame {
         ConsultaProduto = new javax.swing.JMenuItem();
         ConsultaCategoria = new javax.swing.JMenuItem();
         MenuReajuste = new javax.swing.JMenu();
+        Reajuste = new javax.swing.JMenuItem();
         MenuRelatorio = new javax.swing.JMenu();
-        jMenu1 = new javax.swing.JMenu();
+        Relatorio = new javax.swing.JMenuItem();
+        MenuMovimentar = new javax.swing.JMenu();
+        Movimentar = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Menu Principal");
@@ -68,18 +71,55 @@ public class Master extends javax.swing.JFrame {
         MenuConsultaEdicao.add(ConsultaProduto);
 
         ConsultaCategoria.setText("Consulta de Categorias");
+        ConsultaCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ConsultaCategoriaActionPerformed(evt);
+            }
+        });
         MenuConsultaEdicao.add(ConsultaCategoria);
 
         MenuBar.add(MenuConsultaEdicao);
 
         MenuReajuste.setText("Reajuste");
+
+        Reajuste.setText("Reajuste");
+        Reajuste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReajusteActionPerformed(evt);
+            }
+        });
+        MenuReajuste.add(Reajuste);
+
         MenuBar.add(MenuReajuste);
 
         MenuRelatorio.setText("Relatórios");
+        MenuRelatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MenuRelatorioActionPerformed(evt);
+            }
+        });
+
+        Relatorio.setText("Relatórios");
+        Relatorio.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RelatorioActionPerformed(evt);
+            }
+        });
+        MenuRelatorio.add(Relatorio);
+
         MenuBar.add(MenuRelatorio);
 
-        jMenu1.setText("Movimentação");
-        MenuBar.add(jMenu1);
+        MenuMovimentar.setText("Movimentação");
+
+        Movimentar.setText("Movimentação");
+        Movimentar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                MovimentarActionPerformed(evt);
+            }
+        });
+        MenuMovimentar.add(Movimentar);
+
+        MenuBar.add(MenuMovimentar);
 
         setJMenuBar(MenuBar);
 
@@ -111,6 +151,31 @@ public class Master extends javax.swing.JFrame {
         ConsultaProduto objeto = new ConsultaProduto();
         objeto.setVisible(true);
     }//GEN-LAST:event_ConsultaProdutoActionPerformed
+
+    private void ConsultaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaCategoriaActionPerformed
+        ConsultaCategoria objeto = new ConsultaCategoria();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_ConsultaCategoriaActionPerformed
+
+    private void MenuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRelatorioActionPerformed
+        Relatorio objeto = new Relatorio();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_MenuRelatorioActionPerformed
+
+    private void RelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RelatorioActionPerformed
+        Relatorio objeto = new Relatorio();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_RelatorioActionPerformed
+
+    private void ReajusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReajusteActionPerformed
+        Reajuste objeto = new Reajuste();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_ReajusteActionPerformed
+
+    private void MovimentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimentarActionPerformed
+        Movimentacao objeto = new Movimentacao();
+        objeto.setVisible(true);
+    }//GEN-LAST:event_MovimentarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -162,8 +227,11 @@ public class Master extends javax.swing.JFrame {
     private javax.swing.JMenuBar MenuBar;
     private javax.swing.JMenu MenuCadastro;
     private javax.swing.JMenu MenuConsultaEdicao;
+    private javax.swing.JMenu MenuMovimentar;
     private javax.swing.JMenu MenuReajuste;
     private javax.swing.JMenu MenuRelatorio;
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem Movimentar;
+    private javax.swing.JMenuItem Reajuste;
+    private javax.swing.JMenuItem Relatorio;
     // End of variables declaration//GEN-END:variables
 }
