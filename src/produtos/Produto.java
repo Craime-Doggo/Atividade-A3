@@ -159,4 +159,8 @@ public String toString() {
         + ", tamanho = " + getTamanho()
         + ", embalagem = " + getEmbalagem();
 }
+  public ArrayList<Produto> getMinhaLista() {
+        return dao.getMinhaLista();
+  }
+
 }
