@@ -64,7 +64,7 @@ public class Categoria {
         this.embalagem = embalagem;
     }
 @Override
-    public String toString() {
+public String toString() {
     return "id_categoria = " + id_categoria +
            ", nome_categoria = " + nome_categoria +
            ", tamanho = " + tamanho +
