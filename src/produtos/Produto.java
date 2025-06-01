@@ -1,6 +1,7 @@
 package produtos;
 
 import dao.ProdutoDAO;
+import java.util.ArrayList;
 
 public class Produto extends Categoria{
 
@@ -143,4 +144,19 @@ public class Produto extends Categoria{
     /**
      * @param Estoque_maximo the Estoque_maximo to set
      */
+@Override
+public String toString() {
+    return super.toString()
+        + " id = " + Id
+        + ", nome = " + Nome
+        + ", preco = " + Preco
+        + ", unidade = " + Unidade
+        + ", quantidade_estoque = " + Quantidade_estoque
+        + ", estoque_minimo = " + Estoque_minimo
+        + ", estoque_maximo = " + Estoque_maximo
+        + ", id_categoria = " + getId_categoria()
+        + ", nome_categoria = " + getNome_categoria()
+        + ", tamanho = " + getTamanho()
+        + ", embalagem = " + getEmbalagem();
+}
 }
