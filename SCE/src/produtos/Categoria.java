@@ -1,5 +1,8 @@
 package produtos;
 import dao.CategoriaDAO;
+import java.util.ArrayList;
+import java.util.List;
+
 
 public class Categoria {
 
@@ -58,18 +61,48 @@ public class Categoria {
     public String getEmbalagem() {
         return embalagem;
     }
+    
+    public boolean deleteCategoriaBD(int id) {
+        dao.deleteCategoriaBD(id);
+        return true;
+    }
+    
+    public boolean updateCategoriaBD(int id_categoria, String nome_categoria, String tamanho, String embalagem) {
+        Categoria objeto = new Categoria(id_categoria, nome_categoria, tamanho, embalagem);
+        dao.updateCategoriaBD(objeto);
+        return true;
+    }
 
 
     public void setEmbalagem(String embalagem) {
         this.embalagem = embalagem;
     }
-@Override
-public String toString() {
-    return "id_categoria = " + id_categoria +
-           ", nome_categoria = " + nome_categoria +
-           ", tamanho = " + tamanho +
-           ", embalagem = " + embalagem +
-           ", user = root" +
-           ", password = admin";
-        }
+    @Override
+    public String toString() {
+        return "id_categoria = " + id_categoria
+                + ", nome_categoria = " + nome_categoria
+                + ", tamanho = " + tamanho
+                + ", embalagem = " + embalagem
+                + ", user = root"
+                + ", password = admin";
+    }
+    public ArrayList<Categoria> getMinhaListaCategoria() {
+        return dao.getMinhaLista();
+    }
+    public boolean insertCategoria(String nome_categoria, String tamanho, String embalagem,String user, String password) {
+        int id_categoria = this.maiorID() + 1;
+        Categoria objeto = new Categoria(id_categoria ,nome_categoria, tamanho, embalagem, user, password);
+        dao.insertCategoriaBD(objeto);
+        return true;
+    }
+    public Categoria carregaCategoria(int id) {
+        return dao.carregaCategoria(id);
+    }
+    public int maiorID() {
+        return dao.maiorID();
+    }
+    
+    public List<Categoria> buscarPorNome(String nome) {
+        return dao.buscarPorNome(nome);
+    }
 }
