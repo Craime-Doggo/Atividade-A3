@@ -21,6 +21,9 @@ public class Produto extends Categoria{
     private int Estoque_minimo;
     private int Estoque_maximo;
     private int id_categoria;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
     private ProdutoDAO dao;
 
@@ -194,5 +197,9 @@ public String toString() {
         return dao.maiorID();
     }
 
+<<<<<<< Updated upstream
+}
+>>>>>>> Stashed changes
+=======
 }
 >>>>>>> Stashed changes

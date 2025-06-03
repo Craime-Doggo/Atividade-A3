@@ -69,7 +69,11 @@ public class CategoriaDAO {
             try {
                 Statement stmt = this.getConexao().createStatement();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                 ResultSet res = stmt.executeQuery("SELECT MAX(id) id FROM tb_categoria");
+=======
+                ResultSet res = stmt.executeQuery("SELECT MAX(Id_produto) id FROM tb_produto");
+>>>>>>> Stashed changes
 =======
                 ResultSet res = stmt.executeQuery("SELECT MAX(Id_produto) id FROM tb_produto");
 >>>>>>> Stashed changes
@@ -138,6 +142,9 @@ public class CategoriaDAO {
                     stmt.setString(9, objeto.getNome_categoria());
                     stmt.setString(10, objeto.getTamanho());
                     stmt.setString(11, objeto.getEmbalagem());
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                     
                     stmt.execute();
@@ -154,7 +161,11 @@ public class CategoriaDAO {
                 try {
                     Statement stmt = this.getConexao().createStatement();
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
                     stmt.executeUpdate("DELETE FROM tb_categoria WHERE id = " + id);
+=======
+                    stmt.executeUpdate("DELETE FROM tb_produto WHERE Id_produto = " + id);
+>>>>>>> Stashed changes
 =======
                     stmt.executeUpdate("DELETE FROM tb_produto WHERE Id_produto = " + id);
 >>>>>>> Stashed changes
@@ -164,6 +175,7 @@ public class CategoriaDAO {
                 }
                 return false;
             }
+<<<<<<< Updated upstream
 <<<<<<< Updated upstream
             /* public boolean updateCategoriaBD (Categoria objeto) {
                 String sql = "UPDATE tb_categoria set id = ?, tamanho = ?, embalagem = ?";
@@ -180,6 +192,13 @@ public class CategoriaDAO {
                 
                 try {
                     PreparedStatement stmt = this.getConexao().prepareStatement(sql);
+=======
+            public boolean updateProdutoBD (Produto objeto) {
+                String sql = "UPDATE tb_produto SET Nome_produto = ?, Preco_produto = ?, Unidade_produto = ?, Quantidade_estoque = ?, Estoque_minimo = ?, Estoque_maximo = ? WHERE Id_produto = ?";
+                
+                try {
+                    PreparedStatement stmt = this.getConexao().prepareStatement(sql);
+>>>>>>> Stashed changes
                     stmt.setString(1, objeto.getNome());
                     stmt.setDouble(2, objeto.getPreco());
                     stmt.setString(3, objeto.getUnidade());
@@ -188,6 +207,9 @@ public class CategoriaDAO {
                     stmt.setInt(6, objeto.getEstoque_maximo());
                     stmt.setInt(7, objeto.getId());
 
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
                     
                     stmt.execute();
