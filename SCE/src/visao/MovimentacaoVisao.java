@@ -46,7 +46,7 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
 
     
     private void carregarProdutos() {
-    Produto produtoDAO = new Produto("root", "admin"); 
+    ProdutoDAO produtoDAO = new ProdutoDAO ("root", "admin"); 
     List <Produto> listaProdutos = produtoDAO.listarTodosProdutos(); // método que você cria para pegar todos os produtos
 
     modelo.setRowCount(0); // limpa tabela
@@ -239,7 +239,7 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
             }
 
              String tipoMov = retirada ? "Saida" : "Entrada";
-                produtos.Movimentacao mov = new produtos.Movimentacao()
+                Movimentacao mov = new Movimentacao()
                 mov.setIdProduto(p.getId());
                 mov.setTipo(tipoMov);
                 mov.setQuantidade(qntEditada);
