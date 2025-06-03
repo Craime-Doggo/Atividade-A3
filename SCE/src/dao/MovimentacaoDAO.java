@@ -4,6 +4,7 @@
  */
 package dao;
 import java.sql.*;
+import produtos.Movimentacao;
 
 /**
  *

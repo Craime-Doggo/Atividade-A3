@@ -4,12 +4,15 @@ import javax.swing.table.DefaultTableModel;
 import produtos.Produto;
 import dao.ProdutoDAO;
 import java.util.List;
+import dao.MovimentacaoDAO;
+import produtos.Movimentacao;
+
 
 /**
  *
  * @author Allex
  */
-public class Movimentacao extends javax.swing.JFrame {
+public class MovimentacaoVisao extends javax.swing.JFrame {
     
      DefaultTableModel modelo = new DefaultTableModel(
         new Object[][]{},
@@ -34,7 +37,7 @@ public class Movimentacao extends javax.swing.JFrame {
         }
     };
      
-     public Movimentacao() {
+     public MovimentacaoVisao() {
         initComponents();
         JTEstoque.setModel(modelo);
         carregarProdutos();
@@ -43,7 +46,7 @@ public class Movimentacao extends javax.swing.JFrame {
 
     
     private void carregarProdutos() {
-    Produto produtoDAO = new Produto("root", "admin"); // ou user/pass conforme seu setup
+    Produto produtoDAO = new Produto("root", "admin"); 
     List <Produto> listaProdutos = produtoDAO.listarTodosProdutos(); // método que você cria para pegar todos os produtos
 
     modelo.setRowCount(0); // limpa tabela
@@ -61,9 +64,9 @@ public class Movimentacao extends javax.swing.JFrame {
 }
 
     /**
-     * Creates new form Movimentacao
+     * Creates new form MovimentacaoVisao
      */
-    }
+    
 
     
     @SuppressWarnings("unchecked")
@@ -217,8 +220,8 @@ public class Movimentacao extends javax.swing.JFrame {
 
     private void JBConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBConfirmarActionPerformed
         
-    MovimentacaoDAO movDAO = new MovimentacaoDAO("root", "admin"); // seu usuário e senha do banco
-    ProdutoDAO produtoDAO = new ProdutoDAO("root", "admin");
+    ProdutoDAO produtoDAO = new ProdutoDAO("root", "admin"); // seu usuário e senha do banco
+    MovimentacaoDAO movDAO = new MovimentacaoDAO("root", "admin");
 
     for (int i = 0; i < modelo.getRowCount(); i++) {
         String nomeProduto = (String) modelo.getValueAt(i, 0);
@@ -236,15 +239,15 @@ public class Movimentacao extends javax.swing.JFrame {
             }
 
              String tipoMov = retirada ? "Saida" : "Entrada";
-                Movimentacao mov = new Movimentacao();
-                mov.setIdProduto(p.getIdProduto());
+                produtos.Movimentacao mov = new produtos.Movimentacao()
+                mov.setIdProduto(p.getId());
                 mov.setTipo(tipoMov);
                 mov.setQuantidade(qntEditada);
 
                 boolean sucessoMov = movDAO.inserirMovimentacao(mov);
                 if (sucessoMov) {
                     int novaQtd = retirada ? qntAtual - qntEditada : qntAtual + qntEditada;
-                    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getIdProduto(), novaQtd);
+                    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getId(), novaQtd);
                     if (sucessoEstoque) {
                         modelo.setValueAt(novaQtd, i, 3);
                         modelo.setValueAt(false, i, 1);
@@ -256,8 +259,8 @@ public class Movimentacao extends javax.swing.JFrame {
                 } else {
                     JOptionPane.showMessageDialog(this, "Erro ao salvar movimentação para " + nomeProduto);
                 }
-        }
-    }
+    }       }
+    
 
 
     }//GEN-LAST:event_JBConfirmarActionPerformed
