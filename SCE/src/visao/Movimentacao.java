@@ -1,10 +1,32 @@
 package visao;
 import javax.swing.table.DefaultTableModel;
+import produtos.Produto;
+import dao.ProdutoDAO;
+
 /**
  *
  * @author Allex
  */
 public class Movimentacao extends javax.swing.JFrame {
+
+    
+    private void carregarProdutos() {
+    Produto produtoDAO = new Produto("root", "admin"); // ou user/pass conforme seu setup
+    ArrayList <Produto> minhaLista = produtoDAO.getMinhaLista(); // método que você cria para pegar todos os produtos
+
+    modelo.setRowCount(0); // limpa tabela
+
+    for (Produto p : minhaLista) {
+        // Produto, Retirada(false), Entrada(false), QntAtual, QntEditada(0)
+        modelo.addRow(new Object[]{
+            p.getNome(),
+            false,
+            false,
+            p.getQuantidade_Estoque(),
+            0
+        });
+    }
+}
 
     /**
      * Creates new form Movimentacao
@@ -12,6 +34,7 @@ public class Movimentacao extends javax.swing.JFrame {
     public Movimentacao() {
         initComponents();
         JTEstoque.setModel(modelo);
+        carregarProdutos();
     }
 
     DefaultTableModel modelo = new DefaultTableModel(
