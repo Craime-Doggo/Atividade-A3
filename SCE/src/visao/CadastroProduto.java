@@ -4,17 +4,23 @@
  */
 package visao;
 
+import produtos.Produto;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Gabriel
  */
 public class CadastroProduto extends javax.swing.JFrame {
-
-    /**
-     * Creates new form JFrameCadastro
-     */
-    public CadastroProduto() {
+    private Produto objpro;
+    private String user;
+    private String password;
+    
+    public CadastroProduto(String user, String password) {
         initComponents();
+        this.user = user;
+        this.password = password;
+        this.objpro = new Produto(user, password);
     }
 
     /**
@@ -35,15 +41,13 @@ public class CadastroProduto extends javax.swing.JFrame {
         Unidade = new javax.swing.JLabel();
         Categoria = new javax.swing.JLabel();
         TextPreco = new javax.swing.JFormattedTextField();
-        TextUnidade = new javax.swing.JComboBox<>();
         TextEstoque = new javax.swing.JTextField();
         TextMinimo = new javax.swing.JTextField();
         TextMaximo = new javax.swing.JTextField();
         TextCategoria = new javax.swing.JComboBox<>();
         Salvar = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
-        Limpar = new javax.swing.JButton();
-        Aviso = new javax.swing.JLabel();
+        TextUnidade = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Produtos");
@@ -69,31 +73,31 @@ public class CadastroProduto extends javax.swing.JFrame {
 
         Categoria.setText("Categoria");
 
-        TextUnidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione...\"", "Item 1", "Item 2" }));
+        TextCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione...\"", "Item 1", "Item 2" }));
+
+        Salvar.setText("Salvar");
+        Salvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalvarActionPerformed(evt);
+            }
+        });
+
+        Cancelar.setText("Cancelar");
+
         TextUnidade.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 TextUnidadeActionPerformed(evt);
             }
         });
 
-        TextCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione...\"", "Item 1", "Item 2" }));
-
-        Salvar.setText("Salvar");
-
-        Cancelar.setText("Cancelar");
-
-        Limpar.setText("Limpar");
-
-        Aviso.setText("Aviso");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(Preco)
                             .addComponent(Unidade)
@@ -103,24 +107,16 @@ public class CadastroProduto extends javax.swing.JFrame {
                             .addComponent(Maximo)
                             .addComponent(Categoria))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TextPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(TextCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(187, 187, 187)
-                        .addComponent(Aviso)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TextPreco, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                            .addComponent(TextEstoque)
+                            .addComponent(TextMinimo)
+                            .addComponent(TextMaximo)
+                            .addComponent(TextCategoria, 0, 275, Short.MAX_VALUE)
+                            .addComponent(TextUnidade))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(Salvar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(Limpar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(Cancelar)
                         .addGap(6, 6, 6))
@@ -129,7 +125,7 @@ public class CadastroProduto extends javax.swing.JFrame {
                         .addContainerGap())))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {TextCategoria, TextPreco, TextUnidade});
+        layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {TextCategoria, TextPreco});
 
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -162,26 +158,118 @@ public class CadastroProduto extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Categoria)
                     .addComponent(TextCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(Aviso)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Salvar)
-                    .addComponent(Cancelar)
-                    .addComponent(Limpar))
+                    .addComponent(Cancelar))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TextUnidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextUnidadeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextUnidadeActionPerformed
-
     private void TextNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TextNomeActionPerformed
+
+    private void SalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalvarActionPerformed
+ try {
+    String nome = "";
+    double preco = 0;
+    String unidade = "";
+    int quantidade_estoque = 0;
+    int estoque_minimo = 0;
+    int estoque_maximo = 0;
+    String categoria = "";  // Categoria do produto
+    int id_categoria = 0; 
+    String nome_categoria = "";
+    String tamanho = ""; 
+    String embalagem = "";
+
+    // Validação do nome
+    if (this.TextNome.getText().trim().length() < 2) {
+        throw new Exception("Nome do produto deve conter ao menos 2 caracteres.");
+    } else {
+        nome = this.TextNome.getText().trim();
+    }
+
+    // Conversão e validação do preço
+    try {
+        preco = Double.parseDouble(this.TextPreco.getText().trim().replace(",", "."));
+    } catch (NumberFormatException e) {
+        throw new Exception("Preço inválido. Use ponto ou vírgula corretamente.");
+    }
+
+    // Conversão e validação do estoque
+    try {
+        quantidade_estoque = Integer.parseInt(this.TextEstoque.getText().trim());
+    } catch (NumberFormatException e) {
+        throw new Exception("Quantidade em estoque inválida.");
+    }
+
+    try {
+        estoque_minimo = Integer.parseInt(this.TextMinimo.getText().trim());
+    } catch (NumberFormatException e) {
+        throw new Exception("Estoque mínimo inválido.");
+    }
+
+    try {
+        estoque_maximo = Integer.parseInt(this.TextMaximo.getText().trim());
+    } catch (NumberFormatException e) {
+        throw new Exception("Estoque máximo inválido.");
+    }
+
+    // Validação da unidade
+    if (this.TextUnidade.getText().trim().isEmpty()) {
+        throw new Exception("Informe a unidade do produto.");
+    } else {
+        unidade = this.TextUnidade.getText().trim();
+    }
+
+    // Validação da categoria do produto
+    categoria = this.TextCategoria.getSelectedItem().toString();
+    if (categoria.equals("Selecione") || categoria.trim().isEmpty()) {
+        throw new Exception("Selecione uma categoria válida para o produto.");
+    }
+
+    // Chamada do método para inserir produto (ajuste conforme sua DAO)
+    boolean sucesso = objpro.insertProduto(
+               Nome, 
+              Preco,Unidade, 
+              quantidade_estoque, 
+              estoque_minimo, 
+              estoque_maximo, 
+              id_categoria, 
+              nome_categoria, 
+              tamanho, 
+              embalagem,
+              user, 
+              password);
+
+    if (sucesso) {
+        JOptionPane.showMessageDialog(null, "Produto salvo com sucesso!");
+
+        // Limpa os campos após salvar
+        this.TextNome.setText("");
+        this.TextPreco.setText("");
+        this.TextEstoque.setText("");
+        this.TextMinimo.setText("");
+        this.TextMaximo.setText("");
+        this.TextUnidade.setText("");
+        this.TextCategoria.setSelectedIndex(0);
+    } else {
+        JOptionPane.showMessageDialog(null, "Erro ao salvar o produto no banco de dados.");
+    }
+
+} catch (Exception erro) {
+    JOptionPane.showMessageDialog(null, erro.getMessage());
+}
+        // TODO add your handling code here:
+    }//GEN-LAST:event_SalvarActionPerformed
+
+    private void TextUnidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextUnidadeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextUnidadeActionPerformed
 
     /**
      * @param args the command line arguments
@@ -226,11 +314,9 @@ public class CadastroProduto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Aviso;
     private javax.swing.JButton Cancelar;
     private javax.swing.JLabel Categoria;
     private javax.swing.JLabel Estoque;
-    private javax.swing.JButton Limpar;
     private javax.swing.JLabel Maximo;
     private javax.swing.JLabel Minimo;
     private javax.swing.JLabel Nome;
@@ -242,7 +328,7 @@ public class CadastroProduto extends javax.swing.JFrame {
     private javax.swing.JTextField TextMinimo;
     private javax.swing.JTextField TextNome;
     private javax.swing.JFormattedTextField TextPreco;
-    private javax.swing.JComboBox<String> TextUnidade;
+    private javax.swing.JTextField TextUnidade;
     private javax.swing.JLabel Unidade;
     // End of variables declaration//GEN-END:variables
 }
