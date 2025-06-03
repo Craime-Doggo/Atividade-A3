@@ -1,11 +1,22 @@
 package visao;
+
 import java.awt.Color;
 import javax.swing.table.DefaultTableModel;
+import produtos.Categoria;
+import dao.CategoriaDAO;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import java.util.List;
 
 public class ConsultaCategoria extends javax.swing.JFrame {
 
-    public ConsultaCategoria() {
+    private Categoria objcat;
+    private List<Integer> listaIds = new ArrayList<>();
+
+    public ConsultaCategoria(String user, String password) {
         initComponents();
+        this.objcat = new Categoria(user, password);
+        this.carregaTabela();
 
         // Placeholder
         campoBusca.setText("Buscar categoria...");
@@ -29,18 +40,32 @@ public class ConsultaCategoria extends javax.swing.JFrame {
             }
         });
 
-        carregarCategorias();
+        carregaTabela();
+
+        tabelaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaCategoriasMouseClicked(evt);
+            }
+        });
     }
     
-    private void carregarCategorias() {
+    private void carregaTabela() {
         DefaultTableModel modelo = (DefaultTableModel) tabelaCategorias.getModel();
         modelo.setRowCount(0); // limpa a tabela
 
-        // Aqui viria a busca no banco ou lista interna:
-        modelo.addRow(new Object[] { "Frutas", "Pequeno", null });
-        modelo.addRow(new Object[] { "Industrializados", "Pequeno", "Plástico" });
-        modelo.addRow(new Object[] { "Eletrodomésticos", null, "Metal" });
+        listaIds.clear();
+
+        ArrayList<Categoria> minhaLista = objcat.getMinhaListaCategoria();
+        for (Categoria cat : minhaLista) {
+            modelo.addRow(new Object[]{
+                cat.getNome_categoria(), 
+                cat.getTamanho(), 
+                cat.getEmbalagem()
+            });
+            listaIds.add(cat.getId_categoria()); // guarda o ID correspondente
+        }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -56,14 +81,14 @@ public class ConsultaCategoria extends javax.swing.JFrame {
         campoBusca = new javax.swing.JTextField();
         Buscar = new javax.swing.JButton();
         Nome = new javax.swing.JLabel();
-        TextNome = new javax.swing.JTextField();
+        jNome = new javax.swing.JTextField();
         Nome1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jTamanho = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
         Editar = new javax.swing.JButton();
         Excluir = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
+        jEmbalagem = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta de Categorias");
@@ -87,42 +112,48 @@ public class ConsultaCategoria extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(tabelaCategorias);
-
-        campoBusca.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoBuscaActionPerformed(evt);
+        tabelaCategorias.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaCategoriasMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(tabelaCategorias);
 
         Buscar.setText("Buscar");
+        Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarActionPerformed(evt);
+            }
+        });
 
         Nome.setText("Nome da Categoria");
 
-        TextNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextNomeActionPerformed(evt);
-            }
-        });
-
         Nome1.setText("Tamanho");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione\"", "Pequeno", "Médio", "Grande", "NULL" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
+        jTamanho.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NULL", "Pequeno", "Médio", "Grande" }));
 
         jLabel1.setText("Embalagem");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione\"", "Plástico", "Papel", "Alumínio", "Vidro", "NOVO" }));
-
         Editar.setText("Editar");
+        Editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditarActionPerformed(evt);
+            }
+        });
 
         Excluir.setText("Excluir");
+        Excluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExcluirActionPerformed(evt);
+            }
+        });
 
         Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -145,13 +176,13 @@ public class ConsultaCategoria extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(Nome1)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(TextNome)
+                                        .addComponent(jNome)
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(jLabel1)
                                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(jTamanho, 0, 251, Short.MAX_VALUE)
+                                                .addComponent(jEmbalagem)))))
                                 .addGap(62, 62, 62)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(Editar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -172,45 +203,150 @@ public class ConsultaCategoria extends javax.swing.JFrame {
                 .addComponent(Nome)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(TextNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Editar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Nome1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Excluir))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Cancelar))
+                    .addComponent(Cancelar)
+                    .addComponent(jEmbalagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(7, 7, 7))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_CancelarActionPerformed
 
-    private void campoBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoBuscaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoBuscaActionPerformed
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        String nomeDigitado = campoBusca.getText().trim();
 
-    private void TextNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextNomeActionPerformed
+        if (nomeDigitado.isEmpty()) {
+            this.carregaTabela();
+            return;
+        }
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+        List<Categoria> lista = objcat.buscarPorNome(nomeDigitado);
+
+        DefaultTableModel modelo = (DefaultTableModel) tabelaCategorias.getModel();
+        modelo.setRowCount(0);
+
+        for (Categoria c : lista) {
+            modelo.addRow(new Object[]{
+                c.getNome_categoria(),
+                c.getTamanho(),
+                c.getEmbalagem()
+            });
+        }
+    }//GEN-LAST:event_BuscarActionPerformed
+
+    private void tabelaCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCategoriasMouseClicked
+        if (this.tabelaCategorias.getSelectedRow() != -1) {
+            String nome = this.tabelaCategorias.getValueAt(this.tabelaCategorias.getSelectedRow(), 0).toString();
+            String tamanho;
+            Object tamanhoObj = this.tabelaCategorias.getValueAt(this.tabelaCategorias.getSelectedRow(), 1);
+            if (tamanhoObj == null) {
+                tamanhoObj = "NULL";
+                tamanho = tamanhoObj.toString();
+            } else {
+                tamanho = tamanhoObj.toString();
+            }
+            String embalagem = this.tabelaCategorias.getValueAt(this.tabelaCategorias.getSelectedRow(), 2).toString();
+
+            this.jNome.setText(nome);
+            this.jTamanho.setSelectedItem(tamanho);
+            this.jEmbalagem.setText(embalagem);
+        }
+    }//GEN-LAST:event_tabelaCategoriasMouseClicked
+
+    private void ExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExcluirActionPerformed
+        try {
+            int id = 0;
+            int linhaSelecionada = this.tabelaCategorias.getSelectedRow();
+            if (linhaSelecionada == -1) {
+                throw new Exception("Primeiro selecione uma categoria para alterar");
+            }
+            id = listaIds.get(linhaSelecionada);
+
+            int respostaUsuario = JOptionPane.showConfirmDialog(
+                    null,
+                    "Tem certeza que deseja apagar esta Categoria?",
+                    "Confirmação",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (respostaUsuario == JOptionPane.YES_OPTION) {
+                if (this.objcat.deleteCategoriaBD(id)) {
+                    this.jNome.setText("");
+                    this.jTamanho.setSelectedItem(0);
+                    this.jEmbalagem.setText("");
+                    JOptionPane.showMessageDialog(rootPane, "Categoria Apagado com Sucesso!");
+                }
+            }
+            // atualiza a tabela.
+            System.out.println(this.objcat.getMinhaListaCategoria().toString());
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        } finally {
+            carregaTabela();
+        }
+    }//GEN-LAST:event_ExcluirActionPerformed
+
+    private void EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarActionPerformed
+        try {
+            int id = 0;
+            String nome = "";
+            String tamanho = "";
+            String embalagem = "";
+
+            if (this.jNome.getText().length() < 2) {
+                throw new Exception("Nome deve conter ao menos 2 caracteres.");
+            } else {
+                nome = this.jNome.getText();
+            }
+
+                tamanho = this.jTamanho.getSelectedItem().toString();
+
+            if (this.jEmbalagem.getText().length() < 2) {
+                throw new Exception("Embalagem deve conter ao menos 2 caracteres.");
+            } else {
+                embalagem = this.jEmbalagem.getText();
+            }
+           
+            int linhaSelecionada = this.tabelaCategorias.getSelectedRow();
+            if (linhaSelecionada == -1) {
+                throw new Exception("Primeiro selecione uma categoria para alterar");
+            }
+            id = listaIds.get(linhaSelecionada);
+
+
+            // envia os dados para o Aluno processar
+            if (this.objcat.updateCategoriaBD(id, nome, tamanho, embalagem)) {
+                this.jNome.setText("");
+                this.jTamanho.setSelectedItem(0);
+                this.jEmbalagem.setText("");
+                JOptionPane.showMessageDialog(null, "Aluno Alterado com Sucesso!");
+
+            }
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        } finally {
+            // atualiza a tabela.
+            carregaTabela();
+        }
+    }//GEN-LAST:event_EditarActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -227,12 +363,18 @@ public class ConsultaCategoria extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(ConsultaCategoria.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
-        //</editor-fold>
 
-        /* Create and display the form */
+        String user = JOptionPane.showInputDialog(null, "Digite o nome de usuário do banco de dados:", "Login", JOptionPane.QUESTION_MESSAGE);
+        String password = JOptionPane.showInputDialog(null, "Digite a senha do banco de dados:", "Login", JOptionPane.QUESTION_MESSAGE);
+
+        if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Usuário e senha são obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsultaCategoria().setVisible(true);
+                new ConsultaCategoria(user, password).setVisible(true);
             }
         });
     }
@@ -244,12 +386,12 @@ public class ConsultaCategoria extends javax.swing.JFrame {
     private javax.swing.JButton Excluir;
     private javax.swing.JLabel Nome;
     private javax.swing.JLabel Nome1;
-    private javax.swing.JTextField TextNome;
     private javax.swing.JTextField campoBusca;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JTextField jEmbalagem;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JTextField jNome;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox<String> jTamanho;
     private javax.swing.JTable tabelaCategorias;
     // End of variables declaration//GEN-END:variables
 }
