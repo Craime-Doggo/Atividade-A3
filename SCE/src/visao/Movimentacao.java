@@ -44,17 +44,17 @@ public class Movimentacao extends javax.swing.JFrame {
     
     private void carregarProdutos() {
     Produto produtoDAO = new Produto("root", "admin"); // ou user/pass conforme seu setup
-    List <Produto> minhaLista = produtoDAO.getMinhaLista(); // método que você cria para pegar todos os produtos
+    List <Produto> listaProdutos = produtoDAO.listarTodosProdutos(); // método que você cria para pegar todos os produtos
 
     modelo.setRowCount(0); // limpa tabela
 
-    for (Produto p : minhaLista) {
+    for (Produto p : listaProdutos) {
         // Produto, Retirada(false), Entrada(false), QntAtual, QntEditada(0)
         modelo.addRow(new Object[]{
             p.getNome(),
             false,
             false,
-            p.getQuantidade_Estoque(),
+            p.getQuantidade_estoque(),
             0
         });
     }
