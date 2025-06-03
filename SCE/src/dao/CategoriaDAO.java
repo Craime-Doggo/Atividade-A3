@@ -100,7 +100,7 @@ public class CategoriaDAO {
     }
 
     public boolean insertCategoriaBD(Categoria objeto) {
-        String sql = "INSERT INTO tb_categoria (id, tamanho, embalagem) VALUES(?,?,?)";
+        String sql = "INSERT INTO tb_categoria (id, nome, tamanho, embalagem) VALUES(?,?,?,?)";
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
 
