@@ -3,12 +3,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package visao;
+import produtos.Categoria;
+import javax.swing.JOptionPane;
+import dao.ProdutoDAO;
 
 /**
  *
  * @author Gabriel
  */
 public class CadastroCategoria extends javax.swing.JFrame {
+    
+    private Categoria objetoCategoria;
 
     /**
      * Creates new form JFrameCadastro
@@ -33,15 +38,20 @@ public class CadastroCategoria extends javax.swing.JFrame {
         Nome = new javax.swing.JLabel();
         TextNome = new javax.swing.JTextField();
         Nome1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        Tamanho = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        Embalagem = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Categorias");
         setResizable(false);
 
         Salvar.setText("Salvar");
+        Salvar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                SalvarMouseClicked(evt);
+            }
+        });
 
         Cancelar.setText("Cancelar");
 
@@ -59,16 +69,16 @@ public class CadastroCategoria extends javax.swing.JFrame {
 
         Nome1.setText("Tamanho");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione\"", "Pequeno", "Médio", "Grande", "NULL" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        Tamanho.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione\"", "Pequeno", "Médio", "Grande", "NULL" }));
+        Tamanho.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                TamanhoActionPerformed(evt);
             }
         });
 
         jLabel1.setText("Embalagem");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione\"", "Plástico", "Papel", "Alumínio", "Vidro", "NOVO" }));
+        Embalagem.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione\"", "Plástico", "Papel", "Alumínio", "Vidro", "NOVO" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -94,7 +104,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
                                 .addComponent(Salvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(Limpar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                                 .addComponent(Cancelar))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -102,8 +112,8 @@ public class CadastroCategoria extends javax.swing.JFrame {
                                     .addComponent(jLabel1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(Tamanho, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(Embalagem, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -116,11 +126,11 @@ public class CadastroCategoria extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Nome1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Tamanho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Embalagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(Aviso)
                 .addGap(18, 18, 18)
@@ -138,9 +148,53 @@ public class CadastroCategoria extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TextNomeActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void TamanhoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TamanhoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_TamanhoActionPerformed
+/*
+    private void SalvarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SalvarMouseClicked
+        try {
+            // recebendo e validando dados da interface gráfica.
+            String Nome = "";
+            String Tamanho = "";
+            String Embalagem = "";
+            String Aviso = "";
+
+            if (this.Nome.getText().length() < 2) {
+                throw new Aviso ("Nome deve conter ao menos 2 caracteres.");
+            } else {
+                Nome = this.Nome.getText();
+            }
+
+            if (this.Tamanho.getText().length() <= 0) {
+                throw new Aviso("Tamanho deve conter 2 caracteres.");
+            } else {
+                Tamanho = this.Tamanho.getText();
+            }
+
+            if (this.Embalagem.getText().length() < 2) {
+                throw new Aviso("Curso deve conter ao menos 2 caracteres.");
+            } else {
+                Embalagem = this.Embalagem.getText();
+            }
+
+            // envia os dados para o Controlador cadastrar
+            if (this.objetoCategoria.insertCategoriaBD (Nome, Tamanho, Embalagem)) {
+                JOptionPane.showMessageDialog(null, "Aluno Cadastrado com Sucesso!");
+                // limpa campos da interface
+                this.Nome.setText("");
+                this.Tamanho.setText("");
+                this.Embalagem.setText("");
+            }
+            //Exibie no console o aluno cadastrado
+            System.out.println(this.objetoCategoria.getminhaLista().toString());
+
+        } catch (Aviso erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        } catch (NumberFormatException erro2) {
+            JOptionPane.showMessageDialog(null, "Informe um número válido.");
+        }
+    }//GEN-LAST:event_SalvarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -191,17 +245,63 @@ public class CadastroCategoria extends javax.swing.JFrame {
             }
         });
     }
+     private void JBSalvarActionPerformed(java.awt.event.ActionEvent evt) {
+        
+    }                                           
+
+    private void JBCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBCancelarActionPerformed
+        //Libera todos os recurso da interface gráfica
+        this.dispose();
+
+    }//GEN-LAST:event_JBCancelarActionPerformed
+
+    /**
+     * @param args the command line arguments
+    
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(FrmCadastroAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(FrmCadastroAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(FrmCadastroAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(FrmCadastroAluno.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+        //</editor-fold>
+
+        /* Create and display the form 
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new FrmCadastroAluno().setVisible(true);
+            }
+        });
+    }
+    */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Aviso;
     private javax.swing.JButton Cancelar;
+    private javax.swing.JComboBox<String> Embalagem;
     private javax.swing.JButton Limpar;
     private javax.swing.JLabel Nome;
     private javax.swing.JLabel Nome1;
     private javax.swing.JButton Salvar;
+    private javax.swing.JComboBox<String> Tamanho;
     private javax.swing.JTextField TextNome;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

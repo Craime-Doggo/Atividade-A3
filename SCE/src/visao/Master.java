@@ -216,8 +216,10 @@ public class Master extends javax.swing.JFrame {
             public void run() {
                 new Master().setVisible(true);
             }
+            
         });
     }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem CadastroCategoria;

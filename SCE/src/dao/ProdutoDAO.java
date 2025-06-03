@@ -25,6 +25,20 @@ public class ProdutoDAO {
  */
 public class CategoriaDAO {
     public ArrayList <Produto> minhaLista = new ArrayList();
+<<<<<<< Updated upstream
+=======
+    private String user_check;
+    private String pass_check;
+    
+    ProdutoDAO objetoProduto = new ProdutoDAO("root", "admin");
+
+    
+    public ProdutoDAO(String user, String password) {
+        this.user_check = user;
+        this.pass_check = password;
+    }
+    
+>>>>>>> Stashed changes
 
     public ArrayList <Produto> getMinhaLista () {
         minhaLista.clear();
@@ -54,7 +68,11 @@ public class CategoriaDAO {
             
             try {
                 Statement stmt = this.getConexao().createStatement();
+<<<<<<< Updated upstream
                 ResultSet res = stmt.executeQuery("SELECT MAX(id) id FROM tb_categoria");
+=======
+                ResultSet res = stmt.executeQuery("SELECT MAX(Id_produto) id FROM tb_produto");
+>>>>>>> Stashed changes
                 res.next();
                 maiorID = res.getInt("id");
                 stmt.close();
@@ -93,6 +111,7 @@ public class CategoriaDAO {
                     return null;
                 }
             }  
+<<<<<<< Updated upstream
             public boolean insertCategoriaBD (Produto objeto) {
                 String sql = "INSERT INTO tb_categoria (id, tamanho, embalagem) VALUES(?,?,?)";
                 try {
@@ -102,6 +121,24 @@ public class CategoriaDAO {
                     stmt.setString(2, objeto.getNome_categoria());
                     stmt.setString(3, objeto.getTamanho());
                     stmt.setString(4, objeto.getEmbalagem());
+=======
+            public boolean insertProdutoBD (Produto objeto) {
+                String sql = "INSERT INTO tb_produto (Id_produto, Nome_produto, Preco_produto, Unidade_produto, Quantidade_estoque, Estoque_minimo, Estoque_maximo, Id_categoria, Nome_categoria, Tamanho, Embalagem ) VALUES(?,?,?,?,?,?,?,?,?,?,?)";
+                try {
+                    PreparedStatement stmt = this.getConexao().prepareStatement(sql);
+                    
+                    stmt.setInt(1, objeto.getId());
+                    stmt.setString(2, objeto.getNome());
+                    stmt.setDouble(3, objeto.getPreco());
+                    stmt.setString(4, objeto.getUnidade());
+                    stmt.setInt(5, objeto.getQuantidade_estoque());
+                    stmt.setInt(6, objeto.getEstoque_minimo());
+                    stmt.setInt(7, objeto.getEstoque_maximo());
+                    stmt.setInt(8, objeto.getId_categoria());
+                    stmt.setString(9, objeto.getNome_categoria());
+                    stmt.setString(10, objeto.getTamanho());
+                    stmt.setString(11, objeto.getEmbalagem());
+>>>>>>> Stashed changes
                     
                     stmt.execute();
                     stmt.close();
@@ -109,20 +146,25 @@ public class CategoriaDAO {
                     return true;
                 } catch (SQLException erro) {
                     System.out.println("Erro: " + erro);
-                    throw new RuntimeException(erro);
+                    return false;
                 }
         
             }
             public boolean deleteCategoriaBD (int id) {
                 try {
                     Statement stmt = this.getConexao().createStatement();
+<<<<<<< Updated upstream
                     stmt.executeUpdate("DELETE FROM tb_categoria WHERE id = " + id);
+=======
+                    stmt.executeUpdate("DELETE FROM tb_produto WHERE Id_produto = " + id);
+>>>>>>> Stashed changes
                     stmt.close();
                 } catch (SQLException erro) {
                     System.out.println("Erro: " + erro);
                 }
-                return true;
+                return false;
             }
+<<<<<<< Updated upstream
             /* public boolean updateCategoriaBD (Categoria objeto) {
                 String sql = "UPDATE tb_categoria set id = ?, tamanho = ?, embalagem = ?";
                 
@@ -132,6 +174,21 @@ public class CategoriaDAO {
                     stmt.setString(2, objeto.getNome_categoria());
                     stmt.setString(3, objeto.getTamanho());
                     stmt.setString(4, objeto.getEmbalagem());
+=======
+            public boolean updateProdutoBD (Produto objeto) {
+                String sql = "UPDATE tb_produto SET Nome_produto = ?, Preco_produto = ?, Unidade_produto = ?, Quantidade_estoque = ?, Estoque_minimo = ?, Estoque_maximo = ? WHERE Id_produto = ?";
+                
+                try {
+                    PreparedStatement stmt = this.getConexao().prepareStatement(sql);
+                    stmt.setString(1, objeto.getNome());
+                    stmt.setDouble(2, objeto.getPreco());
+                    stmt.setString(3, objeto.getUnidade());
+                    stmt.setInt(4, objeto.getQuantidade_estoque());
+                    stmt.setInt(5, objeto.getEstoque_minimo());
+                    stmt.setInt(6, objeto.getEstoque_maximo());
+                    stmt.setInt(7, objeto.getId());
+
+>>>>>>> Stashed changes
                     
                     stmt.execute();
                     stmt.close();
@@ -140,7 +197,7 @@ public class CategoriaDAO {
                     
                 } catch (SQLException erro) {
                     System.out.println("Erro: " + erro);
-                    throw new RuntimeException(erro);
+                    return false;
                 }
             } 
             public Categoria carregaCategoria (int id ) {
@@ -150,13 +207,25 @@ public class CategoriaDAO {
                 try {
                     Statement stmt = this.getConexao().createStatement();
                     
-                    ResultSet res = stmt.executeQuery("SELECT * FROM tb_categoria WHERE id = " + id);
+                    ResultSet res = stmt.executeQuery("SELECT * FROM tb_produto WHERE id = " + id);
+
                     res.next();
                     
+<<<<<<< Updated upstream
                     objeto.setId_categoria (res.getInt("id"));
                     objeto.setNome_categoria (res.getString("Nome"));
                     objeto.setTamanho (res.getString("Tamanho"));
                     objeto.setEmbalagem (res.getString("Embalagem"));
+=======
+                    objeto.setId (res.getInt("id"));
+                    objeto.setNome (res.getString("Nome"));
+                    objeto.setPreco (res.getDouble ("Preco"));
+                    objeto.setUnidade (res.getString("Unidade"));
+                    objeto.setQuantidade_estoque(res.getInt("Quantidade_estoque"));
+                    objeto.setEstoque_minimo(res.getInt("Estoque_minimo"));
+                    objeto.setEstoque_maximo(res.getInt("Estoque_maximo"));
+                    
+>>>>>>> Stashed changes
                     
                     stmt.close();
                 } catch (SQLException erro) {
