@@ -4,6 +4,7 @@
  */
 package dao;
 
+import produtos.Categoria;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -37,8 +38,8 @@ public class ProdutoDAO {
         this.user_check = user;
         this.pass_check = password;
     }
+   
     
-
     public ArrayList <Produto> getMinhaLista () {
         minhaLista.clear();
         
@@ -72,6 +73,7 @@ public class ProdutoDAO {
         }
         public int maiorID () {
             int maiorID = 0;
+            
             
             try {
                 Statement stmt = this.getConexao().createStatement();
@@ -117,6 +119,7 @@ public class ProdutoDAO {
                     return null;
                 }
             }  
+            
             public boolean insertProdutoBD (Produto objeto) {
                 String sql = "INSERT INTO tb_produto (Id, Nome, Preco, Unidade, Quantidade_estoque, Estoque_minimo, Estoque_maximo) VALUES(?,?,?,?,?,?,?)";
                 try {
@@ -138,8 +141,77 @@ public class ProdutoDAO {
                     System.out.println("Erro: " + erro);
                     throw new RuntimeException(erro);
                 }
+                
         
             }
+            public ArrayList <Produto> listarTodosProdutos() {
+            ArrayList <Produto> lista = new ArrayList<>();
+            String sql = "SELECT * FROM tb_produto";
+
+            try (Connection con = getConexao();
+                 PreparedStatement ps = con.prepareStatement(sql);
+                 ResultSet rs = ps.executeQuery()) {
+
+                while (rs.next()) {
+                    Produto p = new Produto();
+                    p.setId(rs.getInt("Id"));
+                    p.setNome(rs.getString("Nome"));
+                    p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
+                    p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
+                    p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
+                    
+                    Categoria cat = new Categoria();
+                    cat.setId_categoria(rs.getInt("Id_categoria"));
+                    cat.setNome_categoria(rs.getString("Nome_categoria"));
+                    p.setCategoria(cat);
+                    lista.add(p);
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Erro ao listar produtos: " + e.getMessage());
+            }
+            return lista;
+        }
+             public Produto buscarPorNome(String nomeProduto) {
+            Produto p = null;
+            String sql = "SELECT * FROM tb_produto WHERE Nome = ?";
+
+            try (Connection con = getConexao();
+                 PreparedStatement ps = con.prepareStatement(sql)) {
+
+                ps.setString(1, nomeProduto);
+                ResultSet rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    p = new Produto();
+                    p.setId(rs.getInt("Id"));
+                    p.setNome(rs.getString("Nome"));
+                    p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
+                    p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
+                    p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
+                    // outros campos se quiser
+                }
+
+            } catch (SQLException e) {
+                System.out.println("Erro ao buscar produto: " + e.getMessage());
+            }
+            return p;
+}
+            public boolean atualizarEstoque(int idProduto, int novaQuantidade) {
+        String sql = "UPDATE tb_produto SET Quantidade_estoque = ? WHERE Id = ?";
+        try (Connection con = getConexao();
+             PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, novaQuantidade);
+            ps.setInt(2, idProduto);
+            int rows = ps.executeUpdate();
+            return rows > 0;
+        } catch (SQLException e) {
+            System.out.println("Erro ao atualizar estoque: " + e.getMessage());
+            return false;
+        }
+            }
+            
+
             public boolean deleteProdutoBD (int id) {
                 try {
                     Statement stmt = this.getConexao().createStatement();
@@ -205,3 +277,4 @@ public class ProdutoDAO {
                 return objeto;
             }
     }
+        

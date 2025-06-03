@@ -49,7 +49,7 @@ public static void main(String[] args) {
 
             // Cria a tabela tb_produto
             String sqlCreateProduto = """
-                CREATE TABLE IF NOT EXI STS tb_produto (
+                CREATE TABLE IF NOT EXISTS tb_produto (
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     nome VARCHAR(100) NOT NULL, 
                     preco_unitario DECIMAL(10, 2) NOT NULL, 

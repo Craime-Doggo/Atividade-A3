@@ -12,6 +12,7 @@ public class Produto extends Categoria{
     private int Quantidade_estoque;
     private int Estoque_minimo;
     private int Estoque_maximo;
+    private Categoria categoria;
     private ProdutoDAO dao;
     
     public Produto() {
@@ -110,6 +111,9 @@ public class Produto extends Categoria{
 
     public void setEstoque_maximo(int Estoque_maximo) {
         this.Estoque_maximo = Estoque_maximo;
+    }
+    public Categoria getCategoria() { return categoria; }
+    public void setCategoria(Categoria categoria) { this.categoria = categoria; 
     }
 
 @Override
