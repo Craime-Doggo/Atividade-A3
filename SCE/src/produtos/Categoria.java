@@ -11,6 +11,8 @@ public class Categoria {
     private String tamanho;
     private String embalagem;
     private CategoriaDAO dao;
+    private String user;
+    private String password;
    
     public Categoria() {
         this("root", "admin");
@@ -29,6 +31,8 @@ public class Categoria {
         this.nome_categoria = nome_categoria;
         this.tamanho = tamanho;
         this.embalagem = embalagem;
+        this.user = user;
+        this.password = password;
         this.dao = new CategoriaDAO(user, password);
     }
     
@@ -73,10 +77,10 @@ public class Categoria {
         return true;
     }
 
-
     public void setEmbalagem(String embalagem) {
         this.embalagem = embalagem;
     }
+    
     @Override
     public String toString() {
         return "id_categoria = " + id_categoria
@@ -103,6 +107,7 @@ public class Categoria {
     }
     
     public List<Categoria> buscarPorNome(String nome) {
+        CategoriaDAO dao = new CategoriaDAO (user, password);
         return dao.buscarPorNome(nome);
     }
 }

@@ -1,18 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package visao;
+import javax.swing.JOptionPane;
 
 public class Master extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JFrameMaster
-     */
+    private String user;
+    private String password;
+
     public Master() {
         initComponents();
+        fazerLogin();
     }
 
+    
+    private void fazerLogin() {
+        user = JOptionPane.showInputDialog(this, "Digite o nome de usuário do banco de dados:", "Login", JOptionPane.QUESTION_MESSAGE);
+        password = JOptionPane.showInputDialog(this, "Digite a senha do banco de dados:", "Login", JOptionPane.QUESTION_MESSAGE);
+
+        if (user == null || password == null || user.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Usuário e senha são obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -143,7 +151,7 @@ public class Master extends javax.swing.JFrame {
     }//GEN-LAST:event_CadastroProdutoActionPerformed
 
     private void CadastroCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroCategoriaActionPerformed
-        CadastroCategoria objeto = new CadastroCategoria();
+        CadastroCategoria objeto = new CadastroCategoria(user, password);
         objeto.setVisible(true);
     }//GEN-LAST:event_CadastroCategoriaActionPerformed
 
@@ -153,7 +161,7 @@ public class Master extends javax.swing.JFrame {
     }//GEN-LAST:event_ConsultaProdutoActionPerformed
 
     private void ConsultaCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaCategoriaActionPerformed
-        ConsultaCategoria objeto = new ConsultaCategoria();
+        ConsultaCategoria objeto = new ConsultaCategoria(user, password);
         objeto.setVisible(true);
     }//GEN-LAST:event_ConsultaCategoriaActionPerformed
 
