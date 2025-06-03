@@ -4,6 +4,7 @@
  */
 package dao;
 
+import produtos.Categoria;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -160,8 +161,8 @@ public class ProdutoDAO {
                     p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
                     
                     Categoria cat = new Categoria();
-                    cat.setIdCategoria(rs.getInt("Id_categoria"));
-                    cat.setNomeCategoria(rs.getString("Nome_categoria"));
+                    cat.setId_categoria(rs.getInt("Id_categoria"));
+                    cat.setNome_categoria(rs.getString("Nome_categoria"));
                     p.setCategoria(cat);
                     lista.add(p);
                 }
