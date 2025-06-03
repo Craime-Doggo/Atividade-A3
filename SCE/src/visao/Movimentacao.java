@@ -63,49 +63,7 @@ public class Movimentacao extends javax.swing.JFrame {
     /**
      * Creates new form Movimentacao
      */
-    public Movimentacao() {
-        initComponents();
-        JTEstoque.setModel(modelo);
-        carregarProdutos();
     }
-
-    DefaultTableModel modelo = new DefaultTableModel(
-            new Object[][]{
-                {"Produto A", false, false, 10, 0},
-                {"Produto B", false, false, 5, 0},
-                {"Produto C", false, false, 8, 0}
-            },
-            new String[]{"Produto", "Retirada", "Entrada", "QntAtual", "QntEditada"}
-    ) {
-        @Override
-        public Class<?> getColumnClass(int columnIndex) {
-            if (columnIndex == 1 || columnIndex == 2) {
-                return Boolean.class;
-            }
-            return super.getColumnClass(columnIndex);
-        }
-
-        @Override
-        public boolean isCellEditable(int row, int column) {
-            return column == 1 || column == 2; // só Retirada e Entrada editáveis
-        }
-
-        @Override
-        public void setValueAt(Object aValue, int row, int column) {
-            super.setValueAt(aValue, row, column);
-
-            if (column == 1 && (Boolean) aValue) {
-                // se marcou "Retirada", desmarca "Entrada"
-                super.setValueAt(false, row, 2);
-            } else if (column == 2 && (Boolean) aValue) {
-                // se marcou "Entrada", desmarca "Retirada"
-                super.setValueAt(false, row, 1);
-            }
-
-            fireTableCellUpdated(row, 1);
-            fireTableCellUpdated(row, 2);
-        }
-    };
 
     
     @SuppressWarnings("unchecked")
