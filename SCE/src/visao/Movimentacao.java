@@ -1,18 +1,50 @@
 package visao;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import produtos.Produto;
 import dao.ProdutoDAO;
+import java.util.List;
 
 /**
  *
  * @author Allex
  */
 public class Movimentacao extends javax.swing.JFrame {
+    
+     DefaultTableModel modelo = new DefaultTableModel(
+        new Object[][]{},
+        new String[]{"Produto", "Retirada", "Entrada", "QntAtual", "QntEditada"}
+    ) {  @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            if (columnIndex == 1 || columnIndex == 2) return Boolean.class;
+            if (columnIndex == 3 || columnIndex == 4) return Integer.class;
+            return String.class;
+        }   @Override
+        public boolean isCellEditable(int row, int column) {
+            return column == 1 || column == 2 || column == 4;
+        }
+        
+        @Override
+        public void setValueAt(Object aValue, int row, int column) {
+            super.setValueAt(aValue, row, column);
+            if (column == 1 && (Boolean) aValue) super.setValueAt(false, row, 2);
+            if (column == 2 && (Boolean) aValue) super.setValueAt(false, row, 1);
+            fireTableCellUpdated(row, 1);
+            fireTableCellUpdated(row, 2);
+        }
+    };
+     
+     public Movimentacao() {
+        initComponents();
+        JTEstoque.setModel(modelo);
+        carregarProdutos();
+    }
+        
 
     
     private void carregarProdutos() {
     Produto produtoDAO = new Produto("root", "admin"); // ou user/pass conforme seu setup
-    ArrayList <Produto> minhaLista = produtoDAO.getMinhaLista(); // método que você cria para pegar todos os produtos
+    List <Produto> minhaLista = produtoDAO.getMinhaLista(); // método que você cria para pegar todos os produtos
 
     modelo.setRowCount(0); // limpa tabela
 
@@ -226,11 +258,58 @@ public class Movimentacao extends javax.swing.JFrame {
     }//GEN-LAST:event_JCRetiraAdicionarActionPerformed
 
     private void JBConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBConfirmarActionPerformed
-        // TODO add your handling code here:
+        
+    MovimentacaoDAO movDAO = new MovimentacaoDAO("root", "admin"); // seu usuário e senha do banco
+    ProdutoDAO produtoDAO = new ProdutoDAO("root", "admin");
+
+    for (int i = 0; i < modelo.getRowCount(); i++) {
+        String nomeProduto = (String) modelo.getValueAt(i, 0);
+        Boolean retirada = (Boolean) modelo.getValueAt(i, 1);
+        Boolean entrada = (Boolean) modelo.getValueAt(i, 2);
+        int qntAtual = (int) modelo.getValueAt(i, 3);
+        int qntEditada = (int) modelo.getValueAt(i, 4);
+
+        if ((retirada || entrada) && qntEditada > 0) {
+            // Buscar produto pelo nome para pegar ID
+            Produto p = produtoDAO.buscarPorNome(nomeProduto);
+            if (p == null) {
+                System.out.println("Produto não encontrado: " + nomeProduto);
+                continue;
+            }
+
+             String tipoMov = retirada ? "Saida" : "Entrada";
+                Movimentacao mov = new Movimentacao();
+                mov.setIdProduto(p.getIdProduto());
+                mov.setTipo(tipoMov);
+                mov.setQuantidade(qntEditada);
+
+                boolean sucessoMov = movDAO.inserirMovimentacao(mov);
+                if (sucessoMov) {
+                    int novaQtd = retirada ? qntAtual - qntEditada : qntAtual + qntEditada;
+                    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getIdProduto(), novaQtd);
+                    if (sucessoEstoque) {
+                        modelo.setValueAt(novaQtd, i, 3);
+                        modelo.setValueAt(false, i, 1);
+                        modelo.setValueAt(false, i, 2);
+                        modelo.setValueAt(0, i, 4);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Erro ao atualizar estoque para " + nomeProduto);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao salvar movimentação para " + nomeProduto);
+                }
+        }
+    }
+
+
     }//GEN-LAST:event_JBConfirmarActionPerformed
 
     /**
      * @param args the command line arguments
+     * CODIGO SQL : SELECT p.*, c.nome_categoria 
+FROM tb_produto p 
+JOIN tb_categoria c ON p.id_categoria = c.id_categoria
+
      */
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
@@ -263,7 +342,6 @@ public class Movimentacao extends javax.swing.JFrame {
             }
         });
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBConfirmar;
     private javax.swing.JButton JBProcurar;
@@ -276,4 +354,4 @@ public class Movimentacao extends javax.swing.JFrame {
     private javax.swing.JTextField JTQuantidade;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
-}
+} 
