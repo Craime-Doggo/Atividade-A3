@@ -239,7 +239,7 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
             }
 
              String tipoMov = retirada ? "Saida" : "Entrada";
-                Movimentacao mov = new Movimentacao()
+                Movimentacao mov = new Movimentacao();
                 mov.setIdProduto(p.getId());
                 mov.setTipo(tipoMov);
                 mov.setQuantidade(qntEditada);
@@ -299,7 +299,7 @@ JOIN tb_categoria c ON p.id_categoria = c.id_categoria
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Movimentacao().setVisible(true);
+                new MovimentacaoVisao().setVisible(true);
             }
         });
     }

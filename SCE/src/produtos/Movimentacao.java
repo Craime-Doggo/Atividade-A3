@@ -13,6 +13,10 @@ public class Movimentacao {
     private int idProduto;
     private String tipo; // "entrada" ou "retirada"
     private int quantidade;
+    
+    public Movimentacao() {
+    // construtor vazio
+}
 
     public Movimentacao(int idProduto, String tipo, int quantidade) {
         this.idProduto = idProduto;
