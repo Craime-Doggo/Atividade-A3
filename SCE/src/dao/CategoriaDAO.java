@@ -38,9 +38,9 @@ public class CategoriaDAO {
             while (res.next()) {
 
                 int id_categoria = res.getInt("categoria_id");
-                String nome_categoria = res.getString("nome");
-                String tamanho = res.getString("Tamanho");
-                String embalagem = res.getString("Embalagem");
+                String nome_categoria = res.getString("nome_categoria");
+                String tamanho = res.getString("tamanho");
+                String embalagem = res.getString("embalagem");
 
                 Categoria objeto = new Categoria(id_categoria, nome_categoria, tamanho, embalagem);
 
@@ -100,7 +100,7 @@ public class CategoriaDAO {
     }
 
     public boolean insertCategoriaBD(Categoria objeto) {
-        String sql = "INSERT INTO tb_categoria (categoria_id, nome, tamanho, embalagem) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO tb_categoria (categoria_id, nome_categoria, tamanho, embalagem) VALUES(?,?,?,?)";
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
 
@@ -132,7 +132,7 @@ public class CategoriaDAO {
     }
 
     public boolean updateCategoriaBD(Categoria objeto) {
-        String sql = "UPDATE tb_categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE categoria_id = ?";
+        String sql = "UPDATE tb_categoria SET nome_categoria = ?, tamanho = ?, embalagem = ? WHERE categoria_id = ?";
 
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
@@ -163,9 +163,9 @@ public class CategoriaDAO {
             res.next();
 
             objeto.setId_categoria(res.getInt("categoria_id"));
-            objeto.setNome_categoria(res.getString("Nome"));
-            objeto.setTamanho(res.getString("Tamanho"));
-            objeto.setEmbalagem(res.getString("Embalagem"));
+            objeto.setNome_categoria(res.getString("nome_categoria"));
+            objeto.setTamanho(res.getString("tamanho"));
+            objeto.setEmbalagem(res.getString("embalagem"));
 
             stmt.close();
         } catch (SQLException erro) {
@@ -186,7 +186,7 @@ public class CategoriaDAO {
             while (rs.next()) {
                 Categoria c = new Categoria();
                 c.setId_categoria(rs.getInt("categoria_id"));
-                c.setNome_categoria(rs.getString("nome"));
+                c.setNome_categoria(rs.getString("nome_categoria"));
                 c.setTamanho(rs.getString("tamanho"));
                 c.setEmbalagem(rs.getString("embalagem"));
                 lista.add(c);
@@ -204,7 +204,7 @@ public class CategoriaDAO {
     public int BuscarId(String nomeBusca) {
         int id = -1; // Valor padrão caso não encontre
 
-        String sql = "SELECT categoria_id FROM tb_categoria WHERE nome LIKE ?";
+        String sql = "SELECT categoria_id FROM tb_categoria WHERE nome_categoria LIKE ?";
 
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
@@ -226,11 +226,11 @@ public class CategoriaDAO {
     
     public List<String> listarCategorias() {
         List<String> categorias = new ArrayList<>();
-        String sql = "SELECT nome FROM tb_categoria"; // Altere o nome da tabela e da coluna conforme seu banco
+        String sql = "SELECT nome_categoria FROM tb_categoria"; // Altere o nome da tabela e da coluna conforme seu banco
         try (Connection conn = this.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
 
             while (rs.next()) {
-                categorias.add(rs.getString("nome"));
+                categorias.add(rs.getString("nome_categoria"));
             }
 
         } catch (SQLException e) {

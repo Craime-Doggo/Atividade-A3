@@ -1,4 +1,5 @@
 package visao;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import produtos.Produto;
@@ -13,6 +14,9 @@ import produtos.Movimentacao;
  * @author Allex
  */
 public class MovimentacaoVisao extends javax.swing.JFrame {
+    
+    String user;
+    String password;
     
      DefaultTableModel modelo = new DefaultTableModel(
         new Object[][]{},
@@ -36,17 +40,21 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
             fireTableCellUpdated(row, 2);
         }
     };
+     private MovimentacaoDAO movDAO;
      
-     public MovimentacaoVisao() {
+     public MovimentacaoVisao(String user, String password) {
         initComponents();
+        this.user = user;
+        this.password = password;
         JTEstoque.setModel(modelo);
         carregarProdutos();
+        movDAO = new MovimentacaoDAO(user, password); // credenciais do banco
     }
         
 
     
     private void carregarProdutos() {
-    ProdutoDAO produtoDAO = new ProdutoDAO ("root", "admin"); 
+    ProdutoDAO produtoDAO = new ProdutoDAO (user, password); 
     List <Produto> listaProdutos = produtoDAO.listarTodosProdutos(); // método que você cria para pegar todos os produtos
 
     modelo.setRowCount(0); // limpa tabela
@@ -220,8 +228,8 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
 
     private void JBConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBConfirmarActionPerformed
         
-    ProdutoDAO produtoDAO = new ProdutoDAO("root", "admin"); // seu usuário e senha do banco
-    MovimentacaoDAO movDAO = new MovimentacaoDAO("root", "admin");
+    ProdutoDAO produtoDAO = new ProdutoDAO(user, password); // usuário e senha do BD
+    MovimentacaoDAO movDAO = new MovimentacaoDAO(user, password);
 
     for (int i = 0; i < modelo.getRowCount(); i++) {
         String nomeProduto = (String) modelo.getValueAt(i, 0);
@@ -299,7 +307,7 @@ JOIN tb_categoria c ON p.id_categoria = c.id_categoria
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MovimentacaoVisao().setVisible(true);
+                new MovimentacaoVisao("root", "admin").setVisible(true);
             }
         });
     }

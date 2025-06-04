@@ -52,7 +52,7 @@ public class ProdutoDAO {
                 int Quantidade_estoque = res.getInt("Quantidade_estoque");
                 int Estoque_minimo = res.getInt("Estoque_minimo");
                 int Estoque_maximo = res.getInt("Estoque_maximo");
-                int id_categoria = res.getInt("id_categoria");
+                int id_categoria = res.getInt("categoria_id");
                 String nome_categoria = res.getString("nome_categoria");
                 String tamanho = res.getString("tamanho");
                 String embalagem = res.getString("embalagem");
@@ -161,8 +161,8 @@ public class ProdutoDAO {
                     p.setEstoque_maximo(rs.getInt("quantidade_maxima"));
                     
                     Categoria cat = new Categoria();
-                    cat.setId_categoria(rs.getInt("Id_categoria"));
-                    cat.setNome_categoria(rs.getString("Nome_categoria"));
+                    cat.setId_categoria(rs.getInt("categoria_id"));
+                    cat.setNome_categoria(rs.getString("nome_categoria"));
                     p.setCategoria(cat);
                     lista.add(p);
                 }
