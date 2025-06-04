@@ -37,7 +37,7 @@ public class CategoriaDAO {
             ResultSet res = stmt.executeQuery("SELECT * FROM tb_categoria");
             while (res.next()) {
 
-                int id_categoria = res.getInt("id");
+                int id_categoria = res.getInt("categoria_id");
                 String nome_categoria = res.getString("nome");
                 String tamanho = res.getString("Tamanho");
                 String embalagem = res.getString("Embalagem");
@@ -58,7 +58,7 @@ public class CategoriaDAO {
 
         try {
             Statement stmt = this.getConexao().createStatement();
-            ResultSet res = stmt.executeQuery("SELECT MAX(id) id FROM tb_categoria");
+            ResultSet res = stmt.executeQuery("SELECT MAX(categoria_id) categoria_id FROM tb_categoria");
             res.next();
             maiorID = res.getInt("id");
             stmt.close();
