@@ -26,7 +26,6 @@ public class CadastroCategoria extends javax.swing.JFrame {
 
         Salvar = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
-        Aviso = new javax.swing.JLabel();
         Nome = new javax.swing.JLabel();
         jNome = new javax.swing.JTextField();
         Tamanho = new javax.swing.JLabel();
@@ -52,8 +51,6 @@ public class CadastroCategoria extends javax.swing.JFrame {
             }
         });
 
-        Aviso.setText("Aviso");
-
         Nome.setText("Nome da Categoria");
 
         Tamanho.setText("Tamanho");
@@ -69,15 +66,10 @@ public class CadastroCategoria extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addContainerGap()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jNome, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(Nome)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(116, 116, 116)
-                                .addComponent(Aviso)))
+                            .addComponent(jNome, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(Nome))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
@@ -111,9 +103,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Embalagem)
                     .addComponent(jEmbalagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addComponent(Aviso)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Salvar)
                     .addComponent(Cancelar))
@@ -213,7 +203,6 @@ public class CadastroCategoria extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel Aviso;
     private javax.swing.JButton Cancelar;
     private javax.swing.JLabel Embalagem;
     private javax.swing.JLabel Nome;
