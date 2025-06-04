@@ -15,6 +15,51 @@ import produtos.Movimentacao;
  */
 public class MovimentacaoVisao extends javax.swing.JFrame {
     
+    private int idProduto;
+    private String tipo; // "entrada" ou "retirada"
+    private int quantidade;
+  
+
+    public MovimentacaoVisao (int idProduto, String tipo, int quantidade) {
+        this.idProduto = idProduto;
+        this.tipo = tipo;
+        this.quantidade = quantidade;
+    }
+
+    public int getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(int idProduto) {
+        this.idProduto = idProduto;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    @Override
+    public String toString() {
+        return "Movimentacao{" +
+                "idProduto=" + idProduto +
+                ", tipo='" + tipo + '\'' +
+                ", quantidade=" + quantidade +
+                '}';
+    }
+ 
+    
      DefaultTableModel modelo = new DefaultTableModel(
         new Object[][]{},
         new String[]{"Produto", "Retirada", "Entrada", "QntAtual", "QntEditada"}
