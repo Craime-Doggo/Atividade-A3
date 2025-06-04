@@ -60,7 +60,7 @@ public class CategoriaDAO {
             Statement stmt = this.getConexao().createStatement();
             ResultSet res = stmt.executeQuery("SELECT MAX(categoria_id) categoria_id FROM tb_categoria");
             res.next();
-            maiorID = res.getInt("id");
+            maiorID = res.getInt("categoria_id");
             stmt.close();
         } catch (SQLException ex) {
             System.out.println("ERRO: " + ex);
@@ -201,24 +201,43 @@ public class CategoriaDAO {
         return lista;
     }
     
-    
-            public List<String> listarCategorias() {
-                List<String> categorias = new ArrayList<>();
-            String sql = "SELECT nome FROM tb_categoria"; // Altere o nome da tabela e da coluna conforme seu banco
-                     try (Connection conn = this.getConexao();
-                 PreparedStatement stmt = conn.prepareStatement(sql);
-                    ResultSet rs = stmt.executeQuery()) {
+    public int BuscarId(String nomeBusca) {
+        int id = -1; // Valor padrão caso não encontre
 
-        while (rs.next()) {
-            categorias.add(rs.getString("nome"));
+        String sql = "SELECT categoria_id FROM tb_categoria WHERE nome LIKE ?";
+
+        try {
+            PreparedStatement stmt = this.getConexao().prepareStatement(sql);
+            stmt.setString(1, "%" + nomeBusca + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt("categoria_id");
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException erro) {
+            throw new RuntimeException("Erro ao buscar ID da categoria: " + erro.getMessage());
         }
 
-    } catch (SQLException e) {
-        e.printStackTrace();
+        return id;
     }
-
-    return categorias;
-}
     
+    public List<String> listarCategorias() {
+        List<String> categorias = new ArrayList<>();
+        String sql = "SELECT nome FROM tb_categoria"; // Altere o nome da tabela e da coluna conforme seu banco
+        try (Connection conn = this.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                categorias.add(rs.getString("nome"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categorias;
+    }
 
 }

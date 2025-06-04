@@ -118,7 +118,7 @@ public class ProdutoDAO {
             }  
             
             public boolean insertProdutoBD (Produto objeto) {
-                String sql = "INSERT INTO tb_produto (Id, Nome, preco_unitario, Unidade, Quantidade_estoque, Quantidade_minima, Quantidade_maxima) VALUES(?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO tb_produto (Id, Nome, preco_unitario, Unidade, Quantidade_estoque, Quantidade_minima, Quantidade_maxima, categoria_id) VALUES(?,?,?,?,?,?,?,?)";
                 try {
                     PreparedStatement stmt = this.getConexao().prepareStatement(sql);
                     
@@ -129,6 +129,7 @@ public class ProdutoDAO {
                     stmt.setInt(5, objeto.getQuantidade_estoque());
                     stmt.setInt(6, objeto.getEstoque_minimo());
                     stmt.setInt(7, objeto.getEstoque_maximo());
+                    stmt.setInt(8, objeto.getId_categoria());
                     
                     stmt.execute();
                     stmt.close();
@@ -170,31 +171,31 @@ public class ProdutoDAO {
                 System.out.println("Erro ao listar produtos: " + e.getMessage());
             }
             return lista;
-        }
-             public Produto buscarPorNome(String nomeProduto) {
-            Produto p = null;
-            String sql = "SELECT * FROM tb_produto WHERE Nome = ?";
+    }
 
-            try (Connection con = getConexao();
-                 PreparedStatement ps = con.prepareStatement(sql)) {
+    public Produto buscarPorNome(String nomeProduto) {
+        Produto p = null;
+        String sql = "SELECT * FROM tb_produto WHERE Nome = ?";
 
-                ps.setString(1, nomeProduto);
-                ResultSet rs = ps.executeQuery();
+        try (Connection con = getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
-                if (rs.next()) {
-                    p = new Produto();
-                    p.setId(rs.getInt("Id"));
-                    p.setNome(rs.getString("Nome"));
-                    p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
-                    p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
-                    p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
-                }
+            ps.setString(1, nomeProduto);
+            ResultSet rs = ps.executeQuery();
 
-            } catch (SQLException e) {
-                System.out.println("Erro ao buscar produto: " + e.getMessage());
+            if (rs.next()) {
+                p = new Produto();
+                p.setId(rs.getInt("Id"));
+                p.setNome(rs.getString("Nome"));
+                p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
+                p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
+                p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
             }
-            return p;
-}
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar produto: " + e.getMessage());
+        }
+        return p;
+    }
             public boolean atualizarEstoque(int idProduto, int novaQuantidade) {
         String sql = "UPDATE tb_produto SET Quantidade_estoque = ? WHERE Id = ?";
         try (Connection con = getConexao();
