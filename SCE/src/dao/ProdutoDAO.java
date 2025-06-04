@@ -189,13 +189,14 @@ public class ProdutoDAO {
                     p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
                     p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
                     p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
-                    // outros campos se quiser
+                    
+                    return p;
                 }
 
             } catch (SQLException e) {
                 System.out.println("Erro ao buscar produto: " + e.getMessage());
             }
-            return p;
+            return null;
 }
             public boolean atualizarEstoque(int idProduto, int novaQuantidade) {
         String sql = "UPDATE tb_produto SET Quantidade_estoque = ? WHERE Id = ?";

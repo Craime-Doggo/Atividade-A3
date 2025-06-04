@@ -1,4 +1,5 @@
 package visao;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import produtos.Produto;
@@ -36,11 +37,13 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
             fireTableCellUpdated(row, 2);
         }
     };
+     private MovimentacaoDAO movDAO;
      
      public MovimentacaoVisao() {
         initComponents();
         JTEstoque.setModel(modelo);
         carregarProdutos();
+        movDAO = new MovimentacaoDAO("root", "admin"); // credenciais do banco
     }
         
 
@@ -220,7 +223,7 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
 
     private void JBConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBConfirmarActionPerformed
         
-    ProdutoDAO produtoDAO = new ProdutoDAO("root", "admin"); // seu usuário e senha do banco
+    ProdutoDAO produtoDAO = new ProdutoDAO("root", "admin"); // usuário e senha do BD
     MovimentacaoDAO movDAO = new MovimentacaoDAO("root", "admin");
 
     for (int i = 0; i < modelo.getRowCount(); i++) {

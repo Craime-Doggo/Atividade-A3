@@ -1,20 +1,18 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package visao;
+import javax.swing.JOptionPane;
+import produtos.Categoria;
 
-/**
- *
- * @author Gabriel
- */
 public class CadastroCategoria extends javax.swing.JFrame {
 
-    /**
-     * Creates new form JFrameCadastro
-     */
-    public CadastroCategoria() {
+    private Categoria objcat;
+    private String user;
+    private String password;
+    
+    public CadastroCategoria(String user, String password) {
         initComponents();
+        this.user = user;
+        this.password = password;
+        this.objcat = new Categoria(user, password);
     }
 
     /**
@@ -28,47 +26,41 @@ public class CadastroCategoria extends javax.swing.JFrame {
 
         Salvar = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
-        Limpar = new javax.swing.JButton();
         Aviso = new javax.swing.JLabel();
         Nome = new javax.swing.JLabel();
-        TextNome = new javax.swing.JTextField();
-        Nome1 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel1 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jNome = new javax.swing.JTextField();
+        Tamanho = new javax.swing.JLabel();
+        jTamanho = new javax.swing.JComboBox<>();
+        Embalagem = new javax.swing.JLabel();
+        jEmbalagem = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Categorias");
         setResizable(false);
 
         Salvar.setText("Salvar");
+        Salvar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SalvarActionPerformed(evt);
+            }
+        });
 
         Cancelar.setText("Cancelar");
-
-        Limpar.setText("Limpar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
         Aviso.setText("Aviso");
 
         Nome.setText("Nome da Categoria");
 
-        TextNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextNomeActionPerformed(evt);
-            }
-        });
+        Tamanho.setText("Tamanho");
 
-        Nome1.setText("Tamanho");
+        jTamanho.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NULL", "Pequeno", "Médio", "Grande" }));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione\"", "Pequeno", "Médio", "Grande", "NULL" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jLabel1.setText("Embalagem");
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione\"", "Plástico", "Papel", "Alumínio", "Vidro", "NOVO" }));
+        Embalagem.setText("Embalagem");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -81,7 +73,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(TextNome, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jNome, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(Nome)))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(116, 116, 116)
@@ -92,18 +84,16 @@ public class CadastroCategoria extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(Salvar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(Limpar, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(Cancelar))
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(Nome1)
-                                    .addComponent(jLabel1))
+                                    .addComponent(Tamanho)
+                                    .addComponent(Embalagem))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                    .addComponent(jTamanho, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jEmbalagem))))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -112,21 +102,20 @@ public class CadastroCategoria extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(Nome)
                 .addGap(18, 18, 18)
-                .addComponent(TextNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(Nome1)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Tamanho)
+                    .addComponent(jTamanho, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(Embalagem)
+                    .addComponent(jEmbalagem, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addComponent(Aviso)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Salvar)
-                    .addComponent(Limpar)
                     .addComponent(Cancelar))
                 .addContainerGap())
         );
@@ -134,13 +123,42 @@ public class CadastroCategoria extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void TextNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextNomeActionPerformed
-         // TODO add your handling code here:
-    }//GEN-LAST:event_TextNomeActionPerformed
+    private void SalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalvarActionPerformed
+        try {
+            String nome = "";
+            String tamanho = "";
+            String embalagem = "";
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+            if (this.jNome.getText().length() < 2) {
+                throw new Exception("Nome deve conter ao menos 2 caracteres.");
+            } else {
+                nome = this.jNome.getText();
+            }
+
+                tamanho = this.jTamanho.getSelectedItem().toString();
+
+            if (this.jEmbalagem.getText().length() < 2) {
+                throw new Exception("Embalagem deve conter ao menos 2 caracteres.");
+            } else {
+                embalagem = this.jEmbalagem.getText();
+            }
+
+
+            // envia os dados para o Aluno processar
+            if (this.objcat.insertCategoria(nome, tamanho, embalagem, user, password)) {
+                this.jNome.setText("");
+                this.jTamanho.setSelectedItem(0);
+                this.jEmbalagem.setText("");
+                JOptionPane.showMessageDialog(null, "Categoria salvada com Sucesso!");
+            }
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        }
+    }//GEN-LAST:event_SalvarActionPerformed
+
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_CancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -178,16 +196,18 @@ public class CadastroCategoria extends javax.swing.JFrame {
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
-        //</editor-fold>
+        String user = JOptionPane.showInputDialog(null, "Digite o nome de usuário do banco de dados:", "Login", JOptionPane.QUESTION_MESSAGE);
+        String password = JOptionPane.showInputDialog(null, "Digite a senha do banco de dados:", "Login", JOptionPane.QUESTION_MESSAGE);
+
+        if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Usuário e senha são obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastroCategoria().setVisible(true);
+                new CadastroCategoria(user, password).setVisible(true);
             }
         });
     }
@@ -195,13 +215,12 @@ public class CadastroCategoria extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel Aviso;
     private javax.swing.JButton Cancelar;
-    private javax.swing.JButton Limpar;
+    private javax.swing.JLabel Embalagem;
     private javax.swing.JLabel Nome;
-    private javax.swing.JLabel Nome1;
     private javax.swing.JButton Salvar;
-    private javax.swing.JTextField TextNome;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel Tamanho;
+    private javax.swing.JTextField jEmbalagem;
+    private javax.swing.JTextField jNome;
+    private javax.swing.JComboBox<String> jTamanho;
     // End of variables declaration//GEN-END:variables
 }
