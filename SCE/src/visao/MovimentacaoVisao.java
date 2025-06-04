@@ -175,9 +175,9 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JLEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JCRetiraAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(162, 162, 162))
+                        .addGap(196, 196, 196))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -228,58 +228,66 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
 
     private void JBConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBConfirmarActionPerformed
         
-    ProdutoDAO produtoDAO = new ProdutoDAO(user, password); // usuário e senha do BD
-    MovimentacaoDAO movDAO = new MovimentacaoDAO(user, password);
-
-    for (int i = 0; i < modelo.getRowCount(); i++) {
-        String nomeProduto = (String) modelo.getValueAt(i, 0);
-        Boolean retirada = (Boolean) modelo.getValueAt(i, 1);
-        Boolean entrada = (Boolean) modelo.getValueAt(i, 2);
-        int qntAtual = (int) modelo.getValueAt(i, 3);
-        int qntEditada = (int) modelo.getValueAt(i, 4);
-
-        if ((retirada || entrada) && qntEditada > 0) {
-            // Buscar produto pelo nome para pegar ID
-            Produto p = produtoDAO.buscarPorNome(nomeProduto);
-            if (p == null) {
-                System.out.println("Produto não encontrado: " + nomeProduto);
-                continue;
-            }
-
-             String tipoMov = retirada ? "Saida" : "Entrada";
-                Movimentacao mov = new Movimentacao();
-                mov.setIdProduto(p.getId());
-                mov.setTipo(tipoMov);
-                mov.setQuantidade(qntEditada);
-
-                boolean sucessoMov = movDAO.inserirMovimentacao(mov);
-                if (sucessoMov) {
-                    int novaQtd = retirada ? qntAtual - qntEditada : qntAtual + qntEditada;
-                    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getId(), novaQtd);
-                    if (sucessoEstoque) {
-                        modelo.setValueAt(novaQtd, i, 3);
-                        modelo.setValueAt(false, i, 1);
-                        modelo.setValueAt(false, i, 2);
-                        modelo.setValueAt(0, i, 4);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Erro ao atualizar estoque para " + nomeProduto);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao salvar movimentação para " + nomeProduto);
-                }
-    }       }
+    ProdutoDAO produtoDAO = new ProdutoDAO(user, password);
     
+    String nomeProduto = JTProduto.getText().trim();
+    String quantidadeStr = JTQuantidade.getText().trim();
+    int operacaoSelecionada = JCRetiraAdicionar.getSelectedIndex(); // 0 = Retirada, 1 = Entrada
 
+    if (nomeProduto.isEmpty() || quantidadeStr.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o nome do produto e a quantidade.");
+        return;
+    }
+
+    int quantidade;
+    try {
+        quantidade = Integer.parseInt(quantidadeStr);
+        if (quantidade <= 0) throw new NumberFormatException();
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Quantidade inválida.");
+        return;
+    }
+
+    Produto p = produtoDAO.buscarPorNome(nomeProduto);
+    if (p == null) {
+        JOptionPane.showMessageDialog(this, "Produto não encontrado.");
+        return;
+    }
+
+    int qntAtual = p.getQuantidade_estoque();
+    int novaQtd = operacaoSelecionada == 0 ? qntAtual - quantidade : qntAtual + quantidade;
+
+    if (novaQtd < 0) {
+        JOptionPane.showMessageDialog(this, "A retirada ultrapassa o estoque atual.");
+        return;
+    }
+
+    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getId(), novaQtd);
+    if (sucessoEstoque) {
+        JOptionPane.showMessageDialog(this, "Estoque atualizado com sucesso.");
+
+        // Atualiza a tabela
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            if (modelo.getValueAt(i, 0).equals(nomeProduto)) {
+                modelo.setValueAt(novaQtd, i, 3); // atualiza QntAtual
+                modelo.setValueAt(0, i, 4);        // limpa QntEditada
+                modelo.setValueAt(false, i, 1);    // desmarca Retirada
+                modelo.setValueAt(false, i, 2);    // desmarca Entrada
+                break;
+            }
+        }
+
+        // Limpa os campos
+        JTProduto.setText("");
+        JTQuantidade.setText("");
+        JCRetiraAdicionar.setSelectedIndex(0);
+    } else {
+        JOptionPane.showMessageDialog(this, "Erro ao atualizar estoque no banco.");
+    }
 
     }//GEN-LAST:event_JBConfirmarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     * CODIGO SQL : SELECT p.*, c.nome_categoria 
-FROM tb_produto p 
-JOIN tb_categoria c ON p.id_categoria = c.id_categoria
-
-     */
+  
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
