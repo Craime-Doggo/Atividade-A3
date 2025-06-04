@@ -225,10 +225,10 @@ public class ConsultaCategoria extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_CancelarActionPerformed
 
-    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {// GEN-FIRST:event_BuscarActionPerformed
         String nomeDigitado = campoBusca.getText().trim();
 
-        if (nomeDigitado.isEmpty()) {
+        if (nomeDigitado.isEmpty() || nomeDigitado.equals("Buscar categoria...")) {
             this.carregaTabela();
             return;
         }
@@ -237,15 +237,17 @@ public class ConsultaCategoria extends javax.swing.JFrame {
 
         DefaultTableModel modelo = (DefaultTableModel) tabelaCategorias.getModel();
         modelo.setRowCount(0);
+        listaIds.clear(); // Limpa a lista de IDs atual
 
         for (Categoria c : lista) {
-            modelo.addRow(new Object[]{
-                c.getNome_categoria(),
-                c.getTamanho(),
-                c.getEmbalagem()
+            modelo.addRow(new Object[] {
+                    c.getNome_categoria(),
+                    c.getTamanho(),
+                    c.getEmbalagem()
             });
+            listaIds.add(c.getId_categoria()); // Adiciona o ID à lista
         }
-    }//GEN-LAST:event_BuscarActionPerformed
+    }// GEN-LAST:event_BuscarActionPerformed
 
     private void tabelaCategoriasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaCategoriasMouseClicked
         if (this.tabelaCategorias.getSelectedRow() != -1) {
@@ -287,7 +289,7 @@ public class ConsultaCategoria extends javax.swing.JFrame {
                     this.jNome.setText("");
                     this.jTamanho.setSelectedItem(0);
                     this.jEmbalagem.setText("");
-                    JOptionPane.showMessageDialog(rootPane, "Categoria Apagado com Sucesso!");
+                    JOptionPane.showMessageDialog(rootPane, "Categoria Apagada com Sucesso!");
                 }
             }
             // atualiza a tabela.
@@ -332,8 +334,7 @@ public class ConsultaCategoria extends javax.swing.JFrame {
                 this.jNome.setText("");
                 this.jTamanho.setSelectedItem(0);
                 this.jEmbalagem.setText("");
-                JOptionPane.showMessageDialog(null, "Aluno Alterado com Sucesso!");
-
+                JOptionPane.showMessageDialog(null, "Categoria Alterada com Sucesso!");
             }
         } catch (Exception erro) {
             JOptionPane.showMessageDialog(null, erro.getMessage());

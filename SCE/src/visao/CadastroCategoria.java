@@ -58,7 +58,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
 
         Tamanho.setText("Tamanho");
 
-        jTamanho.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NULL", "Pequeno", "Médio", "Grande" }));
+        jTamanho.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { " ", "Pequeno", "Médio", "Grande" }));
 
         Embalagem.setText("Embalagem");
 
@@ -145,7 +145,7 @@ public class CadastroCategoria extends javax.swing.JFrame {
 
 
             // envia os dados para o Aluno processar
-            if (this.objcat.insertCategoria(nome, tamanho, embalagem, user, password)) {
+            if (this.objcat.insertCategoria( nome, tamanho, embalagem, user, password)) {
                 this.jNome.setText("");
                 this.jTamanho.setSelectedItem(0);
                 this.jEmbalagem.setText("");
