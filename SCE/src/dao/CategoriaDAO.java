@@ -100,7 +100,7 @@ public class CategoriaDAO {
     }
 
     public boolean insertCategoriaBD(Categoria objeto) {
-        String sql = "INSERT INTO tb_categoria (id, nome, tamanho, embalagem) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO tb_categoria (categoria_id, nome, tamanho, embalagem) VALUES(?,?,?,?)";
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
 
@@ -123,7 +123,7 @@ public class CategoriaDAO {
     public boolean deleteCategoriaBD(int id) {
         try {
             Statement stmt = this.getConexao().createStatement();
-            stmt.executeUpdate("DELETE FROM tb_categoria WHERE id = " + id);
+            stmt.executeUpdate("DELETE FROM tb_categoria WHERE categoria_id = " + id);
             stmt.close();
         } catch (SQLException erro) {
             System.out.println("Erro: " + erro);
@@ -132,7 +132,7 @@ public class CategoriaDAO {
     }
 
     public boolean updateCategoriaBD(Categoria objeto) {
-        String sql = "UPDATE tb_categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE id = ?";
+        String sql = "UPDATE tb_categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE categoria_id = ?";
 
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
@@ -159,10 +159,10 @@ public class CategoriaDAO {
         try {
             Statement stmt = this.getConexao().createStatement();
 
-            ResultSet res = stmt.executeQuery("SELECT * FROM tb_categoria WHERE id = " + id);
+            ResultSet res = stmt.executeQuery("SELECT * FROM tb_categoria WHERE categoria_id = " + id);
             res.next();
 
-            objeto.setId_categoria(res.getInt("id"));
+            objeto.setId_categoria(res.getInt("categoria_id"));
             objeto.setNome_categoria(res.getString("Nome"));
             objeto.setTamanho(res.getString("Tamanho"));
             objeto.setEmbalagem(res.getString("Embalagem"));
@@ -185,7 +185,7 @@ public class CategoriaDAO {
 
             while (rs.next()) {
                 Categoria c = new Categoria();
-                c.setId_categoria(rs.getInt("id"));
+                c.setId_categoria(rs.getInt("categoria_id"));
                 c.setNome_categoria(rs.getString("nome"));
                 c.setTamanho(rs.getString("tamanho"));
                 c.setEmbalagem(rs.getString("embalagem"));
@@ -200,5 +200,25 @@ public class CategoriaDAO {
 
         return lista;
     }
+    
+    
+            public List<String> listarCategorias() {
+                List<String> categorias = new ArrayList<>();
+            String sql = "SELECT nome FROM tb_categoria"; // Altere o nome da tabela e da coluna conforme seu banco
+                     try (Connection conn = this.getConexao();
+                 PreparedStatement stmt = conn.prepareStatement(sql);
+                    ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            categorias.add(rs.getString("nome"));
+        }
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+
+    return categorias;
+}
+    
 
 }

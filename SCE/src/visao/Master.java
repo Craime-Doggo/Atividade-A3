@@ -146,7 +146,7 @@ public class Master extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void CadastroProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CadastroProdutoActionPerformed
-        CadastroProduto objeto = new CadastroProduto();
+        CadastroProduto objeto = new CadastroProduto(user, password);
         objeto.setVisible(true);
     }//GEN-LAST:event_CadastroProdutoActionPerformed
 

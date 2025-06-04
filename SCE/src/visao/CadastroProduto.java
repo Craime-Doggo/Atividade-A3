@@ -3,7 +3,8 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package visao;
-
+import dao.CategoriaDAO;
+import java.util.List;
 import produtos.Produto;
 import javax.swing.JOptionPane;
 
@@ -21,7 +22,24 @@ public class CadastroProduto extends javax.swing.JFrame {
         this.user = user;
         this.password = password;
         this.objpro = new Produto(user, password);
+        carregarCategorias();   
     }
+    
+    private void carregarCategorias() {
+    // Ajuste “root” e “admin” para as credenciais do seu BD
+    CategoriaDAO dao = new CategoriaDAO(user, password);
+    List<String> lista = dao.listarCategorias();
+
+    // Limpa tudo que já estiver no JComboBox (se houver)
+    TextCategoria.removeAllItems();
+    // (Opcional) adiciona um item inicial
+    TextCategoria.addItem("Selecione");
+
+    // Para cada nome de categoria retornado, adiciona no combo
+    for (String nomeCat : lista) {
+        TextCategoria.addItem(nomeCat);
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -73,7 +91,18 @@ public class CadastroProduto extends javax.swing.JFrame {
 
         Categoria.setText("Categoria");
 
+        TextPreco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextPrecoActionPerformed(evt);
+            }
+        });
+
         TextCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione...\"", "Item 1", "Item 2" }));
+        TextCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TextCategoriaActionPerformed(evt);
+            }
+        });
 
         Salvar.setText("Salvar");
         Salvar.addActionListener(new java.awt.event.ActionListener() {
@@ -234,11 +263,11 @@ public class CadastroProduto extends javax.swing.JFrame {
 
     // Chamada do método para inserir produto (ajuste conforme sua DAO)
     boolean sucesso = objpro.insertProduto(
-               Nome, 
-              Preco,Unidade, 
+               nome, 
+              preco,unidade, 
               quantidade_estoque, 
               estoque_minimo, 
-              estoque_maximo, 
+              estoque_maximo,
               id_categoria, 
               nome_categoria, 
               tamanho, 
@@ -270,6 +299,14 @@ public class CadastroProduto extends javax.swing.JFrame {
     private void TextUnidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextUnidadeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_TextUnidadeActionPerformed
+
+    private void TextPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextPrecoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextPrecoActionPerformed
+
+    private void TextCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextCategoriaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TextCategoriaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -306,9 +343,18 @@ public class CadastroProduto extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
+ String user = JOptionPane.showInputDialog(null, "Digite o nome de usuário do banco de dados:", "Login", JOptionPane.QUESTION_MESSAGE);
+        String password = JOptionPane.showInputDialog(null, "Digite a senha do banco de dados:", "Login", JOptionPane.QUESTION_MESSAGE);
+
+        if (user == null || password == null || user.isEmpty() || password.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Usuário e senha são obrigatórios.", "Erro", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CadastroProduto().setVisible(true);
+                new CadastroProduto(user, password).setVisible(true);
             }
         });
     }

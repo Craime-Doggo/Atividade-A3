@@ -14,10 +14,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import produtos.Produto;
 
-/**
- *
- * @author Gabriel
- */
+
     
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -50,7 +47,7 @@ public class ProdutoDAO {
                 
                 int Id = res.getInt("Id_produto");
                 String Nome = res.getString("Nome_produto");
-                double Preco = res.getDouble("Preco_produto");  
+                double Preco = res.getDouble("preco_unitario");  
                 String Unidade = res.getString("Unidade_produto");
                 int Quantidade_estoque = res.getInt("Quantidade_estoque");
                 int Estoque_minimo = res.getInt("Estoque_minimo");
@@ -121,7 +118,7 @@ public class ProdutoDAO {
             }  
             
             public boolean insertProdutoBD (Produto objeto) {
-                String sql = "INSERT INTO tb_produto (Id, Nome, Preco, Unidade, Quantidade_estoque, Estoque_minimo, Estoque_maximo) VALUES(?,?,?,?,?,?,?)";
+                String sql = "INSERT INTO tb_produto (Id, Nome, preco_unitario, Unidade, Quantidade_estoque, Quantidade_minima, Quantidade_maxima) VALUES(?,?,?,?,?,?,?)";
                 try {
                     PreparedStatement stmt = this.getConexao().prepareStatement(sql);
                     
@@ -156,9 +153,11 @@ public class ProdutoDAO {
                     Produto p = new Produto();
                     p.setId(rs.getInt("Id"));
                     p.setNome(rs.getString("Nome"));
+                    p.setPreco(rs.getDouble("preco_unitario"));
+                    p.setUnidade(rs.getString("Unidade"));
                     p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
-                    p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
-                    p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
+                        p.setEstoque_minimo(rs.getInt("quantidade_minima"));
+                    p.setEstoque_maximo(rs.getInt("quantidade_maxima"));
                     
                     Categoria cat = new Categoria();
                     cat.setId_categoria(rs.getInt("Id_categoria"));
@@ -189,7 +188,6 @@ public class ProdutoDAO {
                     p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
                     p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
                     p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
-                    // outros campos se quiser
                 }
 
             } catch (SQLException e) {
@@ -246,11 +244,7 @@ public class ProdutoDAO {
                 }
             } 
 
-    /**
-     *
-     * @param id
-     * @return
-     */
+
     public Produto carregaProduto (int id) {
                 Produto objeto = new Produto ();
                 objeto.setId (id);
