@@ -3,15 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package dao;
+
 import java.sql.*;
 import produtos.Movimentacao;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author parto
- */
 public class MovimentacaoDAO {
-   
+
     private String user;
     private String password;
 
@@ -26,21 +24,67 @@ public class MovimentacaoDAO {
     }
 
     public boolean inserirMovimentacao(Movimentacao mov) {
-        String sql = "INSERT INTO tb_movimentacao (Id, Tipo_movimentacao, Quantidade) VALUES (?, ?, ?)";
+        try (Connection con = getConexao()) {
+            con.setAutoCommit(false); // Transação feita de forma manual
 
-        try (Connection con = getConexao();
-             PreparedStatement ps = con.prepareStatement(sql)) {
-            ps.setInt(1, mov.getIdProduto());
-            ps.setString(2, mov.getTipo());
-            ps.setInt(3, mov.getQuantidade());
+            // Buscar estoque 
+            int estoqueAtual = getEstoqueAtual(con, mov.getIdProduto());
 
-            int rows = ps.executeUpdate();
-            return rows > 0;
+            // Calcular o estoque novo
+            int novoEstoque = estoqueAtual;
+            if (mov.getTipo().equalsIgnoreCase("Entrada")) {
+                novoEstoque += mov.getQuantidade();
+            } else if (mov.getTipo().equalsIgnoreCase("Saída")) {
+                if (estoqueAtual < mov.getQuantidade()) {
+                    JOptionPane.showMessageDialog(null, "Estoque insuficiente para saída!");
+                    return false;
+                }
+                novoEstoque -= mov.getQuantidade();
+            } else {
+                JOptionPane.showMessageDialog(null, "Tipo de movimentação inválido!");
+                return false;
+            }
+
+            // Atualizar esse estoque
+            String sqlUpdate = "UPDATE tb_produto SET estoque = ? WHERE id = ?";
+            try (PreparedStatement psUpdate = con.prepareStatement(sqlUpdate)) {
+                psUpdate.setInt(1, novoEstoque);
+                psUpdate.setInt(2, mov.getIdProduto());
+                psUpdate.executeUpdate();
+            }
+
+            // Inserir a movimentação
+            String sqlInsert = "INSERT INTO tb_movimentacao (Id, Tipo_movimentacao, Quantidade) VALUES (?, ?, ?)";
+            try (PreparedStatement psInsert = con.prepareStatement(sqlInsert)) {
+                psInsert.setInt(1, mov.getIdProduto());
+                psInsert.setString(2, mov.getTipo());
+                psInsert.setInt(3, mov.getQuantidade());
+                psInsert.executeUpdate();
+            }
+
+            con.commit(); // Confirma a transação
+            return true;
+
         } catch (SQLException e) {
-            System.out.println("Erro ao inserir movimentação: " + e.getMessage());
+            JOptionPane.showMessageDialog(null, "Erro ao registrar movimentação: " + e.getMessage());
             return false;
         }
     }
+
+    private int getEstoqueAtual(Connection con, int idProduto) throws SQLException {
+        String sql = "SELECT estoque FROM tb_produto WHERE id = ?";
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, idProduto);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getInt("estoque");
+                } else {
+                    throw new SQLException("Produto não encontrado com ID: " + idProduto);
+                }
+            }
+        }
+    }
 }
+
 
 
