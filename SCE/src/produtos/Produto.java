@@ -134,7 +134,7 @@ public String toString() {
   public ArrayList<Produto> getMinhaLista() {
         return dao.getMinhaLista();
   }
-      public boolean insertProduto(int Id,
+      public boolean insertProduto(
               String Nome, 
               double Preco, String Unidade, 
               int Quantidade_estoque, 
@@ -147,9 +147,10 @@ public String toString() {
               String user, 
               String password) {
         int id = this.maiorID() + 1;
-        Produto objeto = new Produto(Id, Nome, Preco, Unidade, 
+        Produto objeto = new Produto(id, Nome, Preco, Unidade, 
                 Quantidade_estoque, Estoque_minimo, Estoque_maximo, id_categoria ,nome_categoria, 
                 tamanho, embalagem, user, password);
+
         dao.insertProdutoBD(objeto);
         return true;
     }

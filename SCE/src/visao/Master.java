@@ -181,8 +181,8 @@ public class Master extends javax.swing.JFrame {
     }//GEN-LAST:event_ReajusteActionPerformed
 
     private void MovimentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimentarActionPerformed
-    //   Movimentacao objeto = new Movimentacao();
-    //    objeto.setVisible(true);
+        MovimentacaoVisao objeto = new MovimentacaoVisao(user, password);
+        objeto.setVisible(true);
     }//GEN-LAST:event_MovimentarActionPerformed
 
     /**

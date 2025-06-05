@@ -7,6 +7,7 @@ import dao.CategoriaDAO;
 import java.util.List;
 import produtos.Produto;
 import javax.swing.JOptionPane;
+import produtos.Categoria;
 
 /**
  *
@@ -14,14 +15,17 @@ import javax.swing.JOptionPane;
  */
 public class CadastroProduto extends javax.swing.JFrame {
     private Produto objpro;
+    private Categoria objcat;
     private String user;
     private String password;
+    private CategoriaDAO dao;
     
     public CadastroProduto(String user, String password) {
         initComponents();
         this.user = user;
         this.password = password;
         this.objpro = new Produto(user, password);
+        this.objcat = new Categoria(user, password);
         carregarCategorias();   
     }
     
@@ -260,6 +264,8 @@ public class CadastroProduto extends javax.swing.JFrame {
     if (categoria.equals("Selecione") || categoria.trim().isEmpty()) {
         throw new Exception("Selecione uma categoria válida para o produto.");
     }
+    
+    id_categoria = dao.BuscarId(categoria);
 
     // Chamada do método para inserir produto (ajuste conforme sua DAO)
     boolean sucesso = objpro.insertProduto(

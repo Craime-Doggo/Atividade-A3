@@ -86,8 +86,10 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
     };
      private MovimentacaoVisao visaoMOV;
      
-     public MovimentacaoVisao() {
+     public MovimentacaoVisao(String user, String password) {
         initComponents();
+        this.user = user;
+        this.password = password;
         JTEstoque.setModel(modelo);
         carregarProdutos();
         visaoMOV = new MovimentacaoVisao (user, password); // credenciais do banco
@@ -217,9 +219,9 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JLEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(JCRetiraAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(162, 162, 162))
+                        .addGap(196, 196, 196))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -311,17 +313,65 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
                 }
     }       }
     
+    
+    String nomeProduto = JTProduto.getText().trim();
+    String quantidadeStr = JTQuantidade.getText().trim();
+    int operacaoSelecionada = JCRetiraAdicionar.getSelectedIndex(); // 0 = Retirada, 1 = Entrada
 
+    if (nomeProduto.isEmpty() || quantidadeStr.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Preencha o nome do produto e a quantidade.");
+        return;
+    }
+
+    int quantidade;
+    try {
+        quantidade = Integer.parseInt(quantidadeStr);
+        if (quantidade <= 0) throw new NumberFormatException();
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Quantidade inválida.");
+        return;
+    }
+
+    Produto p = produtoDAO.buscarPorNome(nomeProduto);
+    if (p == null) {
+        JOptionPane.showMessageDialog(this, "Produto não encontrado.");
+        return;
+    }
+
+    int qntAtual = p.getQuantidade_estoque();
+    int novaQtd = operacaoSelecionada == 0 ? qntAtual - quantidade : qntAtual + quantidade;
+
+    if (novaQtd < 0) {
+        JOptionPane.showMessageDialog(this, "A retirada ultrapassa o estoque atual.");
+        return;
+    }
+
+    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getId(), novaQtd);
+    if (sucessoEstoque) {
+        JOptionPane.showMessageDialog(this, "Estoque atualizado com sucesso.");
+
+        // Atualiza a tabela
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            if (modelo.getValueAt(i, 0).equals(nomeProduto)) {
+                modelo.setValueAt(novaQtd, i, 3); // atualiza QntAtual
+                modelo.setValueAt(0, i, 4);        // limpa QntEditada
+                modelo.setValueAt(false, i, 1);    // desmarca Retirada
+                modelo.setValueAt(false, i, 2);    // desmarca Entrada
+                break;
+            }
+        }
+
+        // Limpa os campos
+        JTProduto.setText("");
+        JTQuantidade.setText("");
+        JCRetiraAdicionar.setSelectedIndex(0);
+    } else {
+        JOptionPane.showMessageDialog(this, "Erro ao atualizar estoque no banco.");
+    }
 
     }//GEN-LAST:event_JBConfirmarActionPerformed
 
-    /**
-     * @param args the command line arguments
-     * CODIGO SQL : SELECT p.*, c.nome_categoria 
-FROM tb_produto p 
-JOIN tb_categoria c ON p.id_categoria = c.id_categoria
-
-     */
+  
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -349,7 +399,7 @@ JOIN tb_categoria c ON p.id_categoria = c.id_categoria
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new MovimentacaoVisao().setVisible(true);
+                new MovimentacaoVisao("root", "admin").setVisible(true);
             }
         });
     }

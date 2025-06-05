@@ -37,10 +37,10 @@ public class CategoriaDAO {
             ResultSet res = stmt.executeQuery("SELECT * FROM tb_categoria");
             while (res.next()) {
 
-                int id_categoria = res.getInt("id");
-                String nome_categoria = res.getString("nome");
-                String tamanho = res.getString("Tamanho");
-                String embalagem = res.getString("Embalagem");
+                int id_categoria = res.getInt("categoria_id");
+                String nome_categoria = res.getString("nome_categoria");
+                String tamanho = res.getString("tamanho");
+                String embalagem = res.getString("embalagem");
 
                 Categoria objeto = new Categoria(id_categoria, nome_categoria, tamanho, embalagem);
 
@@ -58,9 +58,9 @@ public class CategoriaDAO {
 
         try {
             Statement stmt = this.getConexao().createStatement();
-            ResultSet res = stmt.executeQuery("SELECT MAX(id) id FROM tb_categoria");
+            ResultSet res = stmt.executeQuery("SELECT MAX(categoria_id) categoria_id FROM tb_categoria");
             res.next();
-            maiorID = res.getInt("id");
+            maiorID = res.getInt("categoria_id");
             stmt.close();
         } catch (SQLException ex) {
             System.out.println("ERRO: " + ex);
@@ -100,7 +100,7 @@ public class CategoriaDAO {
     }
 
     public boolean insertCategoriaBD(Categoria objeto) {
-        String sql = "INSERT INTO tb_categoria (id, tamanho, embalagem) VALUES(?,?,?)";
+        String sql = "INSERT INTO tb_categoria (categoria_id, nome_categoria, tamanho, embalagem) VALUES(?,?,?,?)";
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
 
@@ -123,7 +123,7 @@ public class CategoriaDAO {
     public boolean deleteCategoriaBD(int id) {
         try {
             Statement stmt = this.getConexao().createStatement();
-            stmt.executeUpdate("DELETE FROM tb_categoria WHERE id = " + id);
+            stmt.executeUpdate("DELETE FROM tb_categoria WHERE categoria_id = " + id);
             stmt.close();
         } catch (SQLException erro) {
             System.out.println("Erro: " + erro);
@@ -132,7 +132,7 @@ public class CategoriaDAO {
     }
 
     public boolean updateCategoriaBD(Categoria objeto) {
-        String sql = "UPDATE tb_categoria SET nome = ?, tamanho = ?, embalagem = ? WHERE id = ?";
+        String sql = "UPDATE tb_categoria SET nome_categoria = ?, tamanho = ?, embalagem = ? WHERE categoria_id = ?";
 
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
@@ -159,13 +159,13 @@ public class CategoriaDAO {
         try {
             Statement stmt = this.getConexao().createStatement();
 
-            ResultSet res = stmt.executeQuery("SELECT * FROM tb_categoria WHERE id = " + id);
+            ResultSet res = stmt.executeQuery("SELECT * FROM tb_categoria WHERE categoria_id = " + id);
             res.next();
 
-            objeto.setId_categoria(res.getInt("id"));
-            objeto.setNome_categoria(res.getString("Nome"));
-            objeto.setTamanho(res.getString("Tamanho"));
-            objeto.setEmbalagem(res.getString("Embalagem"));
+            objeto.setId_categoria(res.getInt("categoria_id"));
+            objeto.setNome_categoria(res.getString("nome_categoria"));
+            objeto.setTamanho(res.getString("tamanho"));
+            objeto.setEmbalagem(res.getString("embalagem"));
 
             stmt.close();
         } catch (SQLException erro) {
@@ -185,8 +185,8 @@ public class CategoriaDAO {
 
             while (rs.next()) {
                 Categoria c = new Categoria();
-                c.setId_categoria(rs.getInt("id"));
-                c.setNome_categoria(rs.getString("nome"));
+                c.setId_categoria(rs.getInt("categoria_id"));
+                c.setNome_categoria(rs.getString("nome_categoria"));
                 c.setTamanho(rs.getString("tamanho"));
                 c.setEmbalagem(rs.getString("embalagem"));
                 lista.add(c);
@@ -199,6 +199,45 @@ public class CategoriaDAO {
         }
 
         return lista;
+    }
+    
+    public int BuscarId(String nomeBusca) {
+        int id = -1; // Valor padrão caso não encontre
+
+        String sql = "SELECT categoria_id FROM tb_categoria WHERE nome_categoria LIKE ?";
+
+        try {
+            PreparedStatement stmt = this.getConexao().prepareStatement(sql);
+            stmt.setString(1, "%" + nomeBusca + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                id = rs.getInt("categoria_id");
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException erro) {
+            throw new RuntimeException("Erro ao buscar ID da categoria: " + erro.getMessage());
+        }
+
+        return id;
+    }
+    
+    public List<String> listarCategorias() {
+        List<String> categorias = new ArrayList<>();
+        String sql = "SELECT nome_categoria FROM tb_categoria"; // Altere o nome da tabela e da coluna conforme seu banco
+        try (Connection conn = this.getConexao(); PreparedStatement stmt = conn.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                categorias.add(rs.getString("nome_categoria"));
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return categorias;
     }
 
 }
