@@ -156,7 +156,7 @@ public class Master extends javax.swing.JFrame {
     }//GEN-LAST:event_CadastroCategoriaActionPerformed
 
     private void ConsultaProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ConsultaProdutoActionPerformed
-        ConsultaProduto objeto = new ConsultaProduto();
+        ConsultaProduto objeto = new ConsultaProduto(user, password);
         objeto.setVisible(true);
     }//GEN-LAST:event_ConsultaProdutoActionPerformed
 

@@ -107,7 +107,6 @@ public class Categoria {
     }
     
     public List<Categoria> buscarPorNome(String nome) {
-        CategoriaDAO dao = new CategoriaDAO (user, password);
         return dao.buscarPorNome(nome);
     }
 }

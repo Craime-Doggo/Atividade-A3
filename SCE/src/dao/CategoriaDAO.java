@@ -176,7 +176,7 @@ public class CategoriaDAO {
 
     public List<Categoria> buscarPorNome(String nomeBusca) {
         List<Categoria> lista = new ArrayList<>();
-        String sql = "SELECT * FROM tb_categoria WHERE nome LIKE ?";
+        String sql = "SELECT * FROM tb_categoria WHERE nome_categoria LIKE ?";
 
         try {
             PreparedStatement stmt = this.getConexao().prepareStatement(sql);
@@ -222,6 +222,29 @@ public class CategoriaDAO {
         }
 
         return id;
+    }
+    
+    public String BuscarNome(int idBusca) {
+        String nomecat = ""; // Valor padrão caso não encontre
+
+        String sql = "SELECT nome_categoria FROM tb_categoria WHERE categoria_id LIKE ?";
+
+        try {
+            PreparedStatement stmt = this.getConexao().prepareStatement(sql);
+            stmt.setInt(1, idBusca);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                nomecat = rs.getString("nome_categoria");
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException erro) {
+            throw new RuntimeException("Erro ao buscar nome da categoria: " + erro.getMessage());
+        }
+
+        return nomecat;
     }
     
     public List<String> listarCategorias() {

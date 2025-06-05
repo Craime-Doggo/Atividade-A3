@@ -43,21 +43,20 @@
                               <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="TextPreco" alignment="0" min="-2" pref="275" max="-2" attributes="0"/>
-                                  <Component id="TextUnidade" alignment="0" min="-2" pref="275" max="-2" attributes="0"/>
                                   <Component id="TextEstoque" alignment="0" min="-2" pref="275" max="-2" attributes="0"/>
                                   <Component id="TextMinimo" alignment="0" min="-2" pref="275" max="-2" attributes="0"/>
                                   <Component id="TextMaximo" alignment="0" min="-2" pref="275" max="-2" attributes="0"/>
                                   <Component id="TextCategoria" alignment="0" min="-2" pref="275" max="-2" attributes="0"/>
+                                  <Component id="TextUnidade" min="-2" pref="275" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="TextNome" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="Recarregar" alignment="1" max="32767" attributes="0"/>
                           <Component id="Excluir" alignment="1" max="32767" attributes="0"/>
                           <Component id="Editar" alignment="1" max="32767" attributes="0"/>
-                          <Component id="Cancelar" alignment="1" max="32767" attributes="0"/>
+                          <Component id="Cancelar" alignment="1" pref="86" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -96,18 +95,17 @@
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="Unidade" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="TextUnidade" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="Excluir" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="Estoque" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="TextEstoque" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="Excluir" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="Minimo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="TextMinimo" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="Recarregar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -133,7 +131,7 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Component class="javax.swing.JTable" name="jTable1">
+        <Component class="javax.swing.JTable" name="tabelaProdutos">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
               <Table columnCount="7" rowCount="4">
@@ -189,18 +187,21 @@
               <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tabelaProdutosMouseClicked"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
     <Component class="javax.swing.JTextField" name="campoBusca">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="campoBuscaActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="Buscar">
       <Properties>
         <Property name="text" type="java.lang.String" value="Buscar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BuscarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="Minimo">
       <Properties>
@@ -224,23 +225,6 @@
     </Component>
     <Component class="javax.swing.JFormattedTextField" name="TextPreco">
     </Component>
-    <Component class="javax.swing.JComboBox" name="TextUnidade">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="3">
-            <StringItem index="0" value="&quot;Selecione...&quot;"/>
-            <StringItem index="1" value="Item 1"/>
-            <StringItem index="2" value="Item 2"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TextUnidadeActionPerformed"/>
-      </Events>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
-    </Component>
     <Component class="javax.swing.JTextField" name="TextEstoque">
     </Component>
     <Component class="javax.swing.JTextField" name="TextMinimo">
@@ -253,9 +237,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="TextNome">
-      <Events>
-        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TextNomeActionPerformed"/>
-      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="Preco">
       <Properties>
@@ -285,21 +266,27 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Editar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="EditarActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="Excluir">
       <Properties>
         <Property name="text" type="java.lang.String" value="Excluir"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JButton" name="Recarregar">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Recarregar"/>
-      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="ExcluirActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="Cancelar">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cancelar"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CancelarActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JFormattedTextField" name="TextUnidade">
     </Component>
   </SubComponents>
 </Form>

@@ -2,6 +2,7 @@ package produtos;
 
 import dao.ProdutoDAO;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Produto extends Categoria{
 
@@ -161,5 +162,16 @@ public String toString() {
     public int maiorID() {
         return dao.maiorID();
     }
-
+    
+    public List<Produto> buscarListaProdutos(String nome) {
+        return dao.buscarListaProdutos(nome);
+    }
+    
+    public boolean deleteProduto(int id) {
+        return dao.deleteProdutoBD(id);
+    }
+    public boolean updateProdutoBD(int id, String nome, double preco, String unidade, int estoque, int minimo, int maximo, int categoria_id) {
+        Produto objeto = new Produto (id, nome, preco, unidade, estoque, minimo, maximo, 0, "", "", "");
+        return dao.updateProdutoBD(objeto, categoria_id);
+    }
 }

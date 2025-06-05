@@ -1,22 +1,35 @@
 package visao;
+
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
+import produtos.Produto;
+import javax.swing.table.DefaultTableModel;
+import dao.CategoriaDAO;
+import javax.swing.JOptionPane;
+
 public class ConsultaProduto extends javax.swing.JFrame {
 
-    public ConsultaProduto() {
+    private Produto objpro;
+    private CategoriaDAO catdao;
+    private List<Integer> listaIds = new ArrayList<>();
+    private String user;
+    private String password;
+
+    public ConsultaProduto(String user, String password) {
         initComponents();
-        jTable1.getColumnModel().getColumn(0).setPreferredWidth(30);
-        jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
-        jTable1.getColumnModel().getColumn(2).setPreferredWidth(50);
-        jTable1.getColumnModel().getColumn(3).setPreferredWidth(50);
-        jTable1.getColumnModel().getColumn(4).setPreferredWidth(50);
-        jTable1.getColumnModel().getColumn(5).setPreferredWidth(50);
-        jTable1.getColumnModel().getColumn(6).setPreferredWidth(100);
-        
-        
-        javax.swing.SwingUtilities.invokeLater(() -> {
-            campoBusca.setText("Buscar produto...");
-            campoBusca.setForeground(Color.GRAY);
-        });
+        this.objpro = new Produto(user, password);
+        this.catdao = new CategoriaDAO(user, password);
+        tabelaProdutos.getColumnModel().getColumn(0).setPreferredWidth(90);
+        tabelaProdutos.getColumnModel().getColumn(1).setPreferredWidth(40);
+        tabelaProdutos.getColumnModel().getColumn(2).setPreferredWidth(50);
+        tabelaProdutos.getColumnModel().getColumn(3).setPreferredWidth(50);
+        tabelaProdutos.getColumnModel().getColumn(4).setPreferredWidth(50);
+        tabelaProdutos.getColumnModel().getColumn(5).setPreferredWidth(50);
+        tabelaProdutos.getColumnModel().getColumn(6).setPreferredWidth(100);
+
+        campoBusca.setText("Buscar produto...");
+        campoBusca.setForeground(Color.GRAY);
 
         campoBusca.addFocusListener(new java.awt.event.FocusAdapter() {
             @Override
@@ -30,11 +43,50 @@ public class ConsultaProduto extends javax.swing.JFrame {
             @Override
             public void focusLost(java.awt.event.FocusEvent evt) {
                 if (campoBusca.getText().isEmpty()) {
-                    campoBusca.setForeground(Color.GRAY);
                     campoBusca.setText("Buscar produto...");
+                    campoBusca.setForeground(Color.GRAY);
                 }
             }
         });
+        
+        carregarCategorias();     
+        carregaTabela();
+    }
+    
+    private void carregarCategorias() {
+        List<String> lista = catdao.listarCategorias();
+
+        TextCategoria.removeAllItems();
+        TextCategoria.addItem("Selecione");
+
+        for (String nomeCat : lista) {
+            TextCategoria.addItem(nomeCat);
+        }
+    }
+
+    
+    
+    private void carregaTabela() {
+        DefaultTableModel modelo = (DefaultTableModel) tabelaProdutos.getModel();
+        modelo.setRowCount(0); // limpa a tabela
+
+        listaIds.clear();
+
+        ArrayList<Produto> minhaLista = objpro.getMinhaLista();
+        for (Produto pro : minhaLista) {
+            int foo = pro.getId_categoria();
+            String nomecat = catdao.BuscarNome(foo);
+            modelo.addRow(new Object[]{
+                pro.getNome(), 
+                pro.getPreco(), 
+                pro.getUnidade(),
+                pro.getQuantidade_estoque(),
+                pro.getEstoque_minimo(),
+                pro.getEstoque_maximo(),
+                nomecat
+            });
+            listaIds.add(pro.getId()); // guarda o ID correspondente
+        }
     }
 
     /**
@@ -47,7 +99,7 @@ public class ConsultaProduto extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        tabelaProdutos = new javax.swing.JTable();
         campoBusca = new javax.swing.JTextField();
         Buscar = new javax.swing.JButton();
         Minimo = new javax.swing.JLabel();
@@ -55,7 +107,6 @@ public class ConsultaProduto extends javax.swing.JFrame {
         Unidade = new javax.swing.JLabel();
         Categoria = new javax.swing.JLabel();
         TextPreco = new javax.swing.JFormattedTextField();
-        TextUnidade = new javax.swing.JComboBox<>();
         TextEstoque = new javax.swing.JTextField();
         TextMinimo = new javax.swing.JTextField();
         TextMaximo = new javax.swing.JTextField();
@@ -66,13 +117,13 @@ public class ConsultaProduto extends javax.swing.JFrame {
         Estoque = new javax.swing.JLabel();
         Editar = new javax.swing.JButton();
         Excluir = new javax.swing.JButton();
-        Recarregar = new javax.swing.JButton();
         Cancelar = new javax.swing.JButton();
+        TextUnidade = new javax.swing.JFormattedTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Consulta/Edição de Produtos");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaProdutos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null, null, null},
                 {null, null, null, null, null, null, null},
@@ -91,15 +142,19 @@ public class ConsultaProduto extends javax.swing.JFrame {
                 return types [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-
-        campoBusca.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                campoBuscaActionPerformed(evt);
+        tabelaProdutos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tabelaProdutosMouseClicked(evt);
             }
         });
+        jScrollPane1.setViewportView(tabelaProdutos);
 
         Buscar.setText("Buscar");
+        Buscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BuscarActionPerformed(evt);
+            }
+        });
 
         Minimo.setText("Quantidade Mínima");
 
@@ -109,20 +164,7 @@ public class ConsultaProduto extends javax.swing.JFrame {
 
         Categoria.setText("Categoria");
 
-        TextUnidade.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione...\"", "Item 1", "Item 2" }));
-        TextUnidade.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextUnidadeActionPerformed(evt);
-            }
-        });
-
         Nome.setText("Nome do Produto:");
-
-        TextNome.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextNomeActionPerformed(evt);
-            }
-        });
 
         Preco.setText("Preço Unitário");
 
@@ -131,12 +173,25 @@ public class ConsultaProduto extends javax.swing.JFrame {
         Estoque.setText("Quantidade Estoque");
 
         Editar.setText("Editar");
+        Editar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                EditarActionPerformed(evt);
+            }
+        });
 
         Excluir.setText("Excluir");
-
-        Recarregar.setText("Recarregar");
+        Excluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ExcluirActionPerformed(evt);
+            }
+        });
 
         Cancelar.setText("Cancelar");
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -160,18 +215,17 @@ public class ConsultaProduto extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(TextPreco, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TextUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(TextEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(TextMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(TextMaximo, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(TextCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(TextCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(TextUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addComponent(TextNome))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(Recarregar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Excluir, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(Editar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(Cancelar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                            .addComponent(Cancelar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 86, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(campoBusca)
                         .addGap(18, 18, 18)
@@ -200,17 +254,16 @@ public class ConsultaProduto extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Unidade)
-                    .addComponent(TextUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Excluir))
+                    .addComponent(TextUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Estoque)
-                    .addComponent(TextEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(TextEstoque, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(Excluir))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Minimo)
-                    .addComponent(TextMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(Recarregar))
+                    .addComponent(TextMinimo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Maximo)
@@ -226,17 +279,157 @@ public class ConsultaProduto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void campoBuscaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campoBuscaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campoBuscaActionPerformed
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_CancelarActionPerformed
 
-    private void TextUnidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextUnidadeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextUnidadeActionPerformed
+    private void BuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BuscarActionPerformed
+        String nomeDigitado = campoBusca.getText().trim();
 
-    private void TextNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextNomeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextNomeActionPerformed
+        if (nomeDigitado.isEmpty() || nomeDigitado.equals("Buscar produto...")) {
+            this.carregaTabela();
+            return;
+        }
+
+        List<Produto> lista = objpro.buscarListaProdutos(nomeDigitado);
+
+        DefaultTableModel modelo = (DefaultTableModel) tabelaProdutos.getModel();
+        modelo.setRowCount(0);
+        listaIds.clear(); // Limpa a lista de IDs atual
+
+        for (Produto p : lista) {
+            String nomecat = catdao.BuscarNome(p.getId_categoria());
+
+            modelo.addRow(new Object[]{
+                p.getNome(),
+                p.getPreco(), // garante que é double
+                p.getUnidade(),
+                p.getQuantidade_estoque(),
+                p.getEstoque_minimo(),
+                p.getEstoque_maximo(),
+                nomecat
+            });
+
+            listaIds.add(p.getId());
+        }
+    }//GEN-LAST:event_BuscarActionPerformed
+
+    private void tabelaProdutosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tabelaProdutosMouseClicked
+        if (this.tabelaProdutos.getSelectedRow() != -1) {
+            String nome = this.tabelaProdutos.getValueAt(this.tabelaProdutos.getSelectedRow(), 0).toString();
+            String preco = this.tabelaProdutos.getValueAt(this.tabelaProdutos.getSelectedRow(), 1).toString();
+            String unidade = this.tabelaProdutos.getValueAt(this.tabelaProdutos.getSelectedRow(), 2).toString();
+            String estoque = this.tabelaProdutos.getValueAt(this.tabelaProdutos.getSelectedRow(), 3).toString();
+            String min = this.tabelaProdutos.getValueAt(this.tabelaProdutos.getSelectedRow(), 4).toString();
+            String max = this.tabelaProdutos.getValueAt(this.tabelaProdutos.getSelectedRow(), 5).toString();
+            String cat = this.tabelaProdutos.getValueAt(this.tabelaProdutos.getSelectedRow(), 6).toString();
+
+            this.TextNome.setText(nome);
+            this.TextPreco.setText(preco);
+            this.TextUnidade.setText(unidade);
+            this.TextEstoque.setText(estoque);
+            this.TextMinimo.setText(min);
+            this.TextMaximo.setText(max);
+            this.TextCategoria.setSelectedItem(cat);
+        }
+    }//GEN-LAST:event_tabelaProdutosMouseClicked
+
+    private void ExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ExcluirActionPerformed
+        try {
+            int id = 0;
+            int linhaSelecionada = this.tabelaProdutos.getSelectedRow();
+            if (linhaSelecionada == -1) {
+                throw new Exception("Primeiro selecione um produto para excluir");
+            }
+            id = listaIds.get(linhaSelecionada);
+
+            int respostaUsuario = JOptionPane.showConfirmDialog(
+                    null,
+                    "Tem certeza que deseja apagar este Produto?",
+                    "Confirmação",
+                    JOptionPane.YES_NO_OPTION
+            );
+
+            if (respostaUsuario == JOptionPane.YES_OPTION) {
+                if (this.objpro.deleteProduto(id)) {
+                    this.TextNome.setText("");
+                    this.TextPreco.setText("");
+                    this.TextUnidade.setText("");
+                    this.TextEstoque.setText("");
+                    this.TextMinimo.setText("");
+                    this.TextMaximo.setText("");
+                    this.TextCategoria.setSelectedIndex(0); // ou .setSelectedItem(null), depende da config
+
+                    JOptionPane.showMessageDialog(rootPane, "Produto apagado com sucesso!");
+                }
+            }
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        } finally {
+            carregaTabela(); // recarrega a tabela após exclusão
+        }
+
+    }//GEN-LAST:event_ExcluirActionPerformed
+
+    private void EditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_EditarActionPerformed
+        try {
+            int id = 0, estoque = 0, minimo = 0, maximo = 0, categoria_id = 0;
+            String nome = "", unidade = "", categoria = "";
+            double preco = 0.0;
+
+            if (this.TextNome.getText().length() < 2) {
+                throw new Exception("Nome deve conter ao menos 2 caracteres.");
+            } else {
+                nome = this.TextNome.getText();
+            }
+
+            try {
+                preco = Double.parseDouble(this.TextPreco.getText().replace(",", "."));
+            } catch (NumberFormatException e) {
+                throw new Exception("Preço inválido. Use apenas números e ponto (.) como separador decimal.");
+            }
+
+            unidade = this.TextUnidade.getText();
+
+            try {
+                estoque = Integer.parseInt(this.TextEstoque.getText());
+                minimo = Integer.parseInt(this.TextMinimo.getText());
+                maximo = Integer.parseInt(this.TextMaximo.getText());
+            } catch (NumberFormatException e) {
+                throw new Exception("Estoque, mínimo e máximo devem conter apenas números inteiros.");
+            }
+
+            categoria = this.TextCategoria.getSelectedItem().toString();
+            if (categoria.equals("Selecione") || categoria.trim().isEmpty()) {
+                throw new Exception("Selecione uma categoria válida para o produto.");
+            }
+            
+            categoria_id = catdao.BuscarId(categoria);
+
+            int linhaSelecionada = this.tabelaProdutos.getSelectedRow();
+            if (linhaSelecionada == -1) {
+                throw new Exception("Primeiro selecione um produto para alterar.");
+            }
+            id = listaIds.get(linhaSelecionada);
+
+            if (this.objpro.updateProdutoBD(id, nome, preco, unidade, estoque, minimo, maximo, categoria_id)) {
+                this.TextNome.setText("");
+                this.TextPreco.setText("");
+                this.TextUnidade.setText("");
+                this.TextEstoque.setText("");
+                this.TextMinimo.setText("");
+                this.TextMaximo.setText("");
+                this.TextCategoria.setSelectedIndex(0);
+                JOptionPane.showMessageDialog(null, "Produto alterado com sucesso!");
+            }
+
+        } catch (Exception erro) {
+            JOptionPane.showMessageDialog(null, erro.getMessage());
+        } finally {
+            carregaTabela(); // recarrega tabela de produtos
+        }
+    }//GEN-LAST:event_EditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -268,7 +461,7 @@ public class ConsultaProduto extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ConsultaProduto().setVisible(true);
+                new ConsultaProduto("root", "admin").setVisible(true);
             }
         });
     }
@@ -284,18 +477,17 @@ public class ConsultaProduto extends javax.swing.JFrame {
     private javax.swing.JLabel Minimo;
     private javax.swing.JLabel Nome;
     private javax.swing.JLabel Preco;
-    private javax.swing.JButton Recarregar;
     private javax.swing.JComboBox<String> TextCategoria;
     private javax.swing.JTextField TextEstoque;
     private javax.swing.JTextField TextMaximo;
     private javax.swing.JTextField TextMinimo;
     private javax.swing.JTextField TextNome;
     private javax.swing.JFormattedTextField TextPreco;
-    private javax.swing.JComboBox<String> TextUnidade;
+    private javax.swing.JFormattedTextField TextUnidade;
     private javax.swing.JLabel Unidade;
     private javax.swing.JTextField campoBusca;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tabelaProdutos;
     // End of variables declaration//GEN-END:variables
 
 

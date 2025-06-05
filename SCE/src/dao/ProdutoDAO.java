@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 import produtos.Produto;
 
 
@@ -45,20 +46,17 @@ public class ProdutoDAO {
             ResultSet res = stmt.executeQuery ("SELECT * FROM tb_produto");
             while (res.next()) {
                 
-                int Id = res.getInt("Id_produto");
-                String Nome = res.getString("Nome_produto");
+                int Id = res.getInt("Id");
+                String Nome = res.getString("Nome");
                 double Preco = res.getDouble("preco_unitario");  
-                String Unidade = res.getString("Unidade_produto");
+                String Unidade = res.getString("Unidade");
                 int Quantidade_estoque = res.getInt("Quantidade_estoque");
-                int Estoque_minimo = res.getInt("Estoque_minimo");
-                int Estoque_maximo = res.getInt("Estoque_maximo");
+                int Estoque_minimo = res.getInt("quantidade_minima");
+                int Estoque_maximo = res.getInt("quantidade_maxima");
                 int id_categoria = res.getInt("categoria_id");
-                String nome_categoria = res.getString("nome_categoria");
-                String tamanho = res.getString("tamanho");
-                String embalagem = res.getString("embalagem");
   
                 
-                Produto objeto = new Produto (Id, Nome, Preco, Unidade, Quantidade_estoque, Estoque_minimo, Estoque_maximo, id_categoria, nome_categoria, tamanho, embalagem);
+                Produto objeto = new Produto (Id, Nome, Preco, Unidade, Quantidade_estoque, Estoque_minimo, Estoque_maximo, id_categoria, "Placeholder", "Size", "Wrapping");
                 
                 minhaLista.add(objeto);
                 }
@@ -156,7 +154,7 @@ public class ProdutoDAO {
                     p.setNome(rs.getString("Nome"));
                     p.setPreco(rs.getDouble("preco_unitario"));
                     p.setUnidade(rs.getString("Unidade"));
-                    p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
+                    p.setQuantidade_estoque(rs.getInt("quantidade_estoque"));
                         p.setEstoque_minimo(rs.getInt("quantidade_minima"));
                     p.setEstoque_maximo(rs.getInt("quantidade_maxima"));
                     
@@ -174,7 +172,7 @@ public class ProdutoDAO {
     }
 
     public Produto buscarPorNome(String nomeProduto) {
-        Produto p = null;
+        Produto p = new Produto();
         String sql = "SELECT * FROM tb_produto WHERE Nome = ?";
 
         try (Connection con = getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
@@ -185,10 +183,13 @@ public class ProdutoDAO {
             if (rs.next()) {
                 p = new Produto();
                 p.setId(rs.getInt("Id"));
+                p.setPreco(rs.getDouble("preco_unitario"));
                 p.setNome(rs.getString("Nome"));
+                p.setUnidade(rs.getString("Unidade"));
                 p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
-                p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
-                p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
+                p.setEstoque_minimo(rs.getInt("quantidade_minima"));
+                p.setEstoque_maximo(rs.getInt("quantidade_maxima"));
+                p.setId_categoria(rs.getInt("categoria_id"));
             }
 
         } catch (SQLException e) {
@@ -221,8 +222,8 @@ public class ProdutoDAO {
                 }
                 return true;
             }
-            public boolean updateProdutoBD (Produto objeto) {
-                String sql = "UPDATE tb_produto set Id = ?, Nome = ?, Preco = ?, Unidade = ?, Quantidade_estoque = ?, Estoque_minimo = ?, Estoque_maximo = ?";
+            public boolean updateProdutoBD (Produto objeto, int categoria_id) {
+                String sql = "UPDATE tb_produto set Id = ?, Nome = ?, preco_unitario = ?, Unidade = ?, Quantidade_estoque = ?, quantidade_minima = ?, quantidade_maxima = ?, categoria_id = ?";
                 
                 try {
                     PreparedStatement stmt = this.getConexao().prepareStatement(sql);
@@ -233,6 +234,7 @@ public class ProdutoDAO {
                     stmt.setInt(5, objeto.getQuantidade_estoque());
                     stmt.setInt(6, objeto.getEstoque_minimo());
                     stmt.setInt(7, objeto.getEstoque_maximo());
+                    stmt.setInt(8, categoria_id);
                     
                     stmt.execute();
                     stmt.close();
@@ -258,11 +260,12 @@ public class ProdutoDAO {
                     
                     objeto.setId (res.getInt("id"));
                     objeto.setNome (res.getString("Nome"));
-                    objeto.setPreco (res.getDouble ("Preço"));
+                    objeto.setPreco (res.getDouble ("preco_unitario"));
                     objeto.setUnidade (res.getString("Unidade"));
                     objeto.setQuantidade_estoque(res.getInt("Quantidade_estoque"));
-                    objeto.setEstoque_minimo(res.getInt("Estoque_minimo"));
-                    objeto.setEstoque_maximo(res.getInt("Estoque_maximo"));
+                    objeto.setEstoque_minimo(res.getInt("quantidade_minima"));
+                    objeto.setEstoque_maximo(res.getInt("quantidade_maxima"));
+                    objeto.setId_categoria(res.getInt("categoria_id"));
                     
                     
                     stmt.close();
@@ -271,5 +274,35 @@ public class ProdutoDAO {
                 }
                 return objeto;
             }
+    
+    public List<Produto> buscarListaProdutos(String nomeBusca) {
+        List<Produto> lista = new ArrayList<>();
+        String sql = "SELECT * FROM tb_produto WHERE nome LIKE ?";
+
+        try {
+            PreparedStatement stmt = this.getConexao().prepareStatement(sql);
+            stmt.setString(1, "%" + nomeBusca + "%");
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Produto p = new Produto();
+                p.setId(rs.getInt("Id"));
+                p.setNome(rs.getString("Nome"));
+                p.setPreco (rs.getDouble ("preco_unitario"));
+                p.setUnidade(rs.getString("Unidade"));
+                p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
+                p.setEstoque_minimo(rs.getInt("quantidade_minima"));
+                p.setEstoque_maximo(rs.getInt("quantidade_maxima"));
+                p.setId_categoria(rs.getInt("categoria_id"));
+                lista.add(p);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException erro) {
+            throw new RuntimeException("Erro ao buscar categorias: " + erro.getMessage());
+        }
+
+        return lista;
     }
-        
+}

@@ -95,18 +95,7 @@ public class CadastroProduto extends javax.swing.JFrame {
 
         Categoria.setText("Categoria");
 
-        TextPreco.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextPrecoActionPerformed(evt);
-            }
-        });
-
         TextCategoria.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\"Selecione...\"", "Item 1", "Item 2" }));
-        TextCategoria.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextCategoriaActionPerformed(evt);
-            }
-        });
 
         Salvar.setText("Salvar");
         Salvar.addActionListener(new java.awt.event.ActionListener() {
@@ -116,10 +105,9 @@ public class CadastroProduto extends javax.swing.JFrame {
         });
 
         Cancelar.setText("Cancelar");
-
-        TextUnidade.addActionListener(new java.awt.event.ActionListener() {
+        Cancelar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TextUnidadeActionPerformed(evt);
+                CancelarActionPerformed(evt);
             }
         });
 
@@ -302,17 +290,9 @@ public class CadastroProduto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_SalvarActionPerformed
 
-    private void TextUnidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextUnidadeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextUnidadeActionPerformed
-
-    private void TextPrecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextPrecoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextPrecoActionPerformed
-
-    private void TextCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TextCategoriaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TextCategoriaActionPerformed
+    private void CancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelarActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_CancelarActionPerformed
 
     /**
      * @param args the command line arguments
