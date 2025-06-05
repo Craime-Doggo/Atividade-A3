@@ -15,8 +15,52 @@ import produtos.Movimentacao;
  */
 public class MovimentacaoVisao extends javax.swing.JFrame {
     
-    String user;
-    String password;
+    private String user;
+    private String password;
+    private int idProduto;
+    private String tipo; // "entrada" ou "retirada"
+    private int quantidade;
+  
+
+    public MovimentacaoVisao (int idProduto, String tipo, int quantidade) {
+        this.idProduto = idProduto;
+        this.tipo = tipo;
+        this.quantidade = quantidade;
+    }
+
+    public int getIdProduto() {
+        return idProduto;
+    }
+
+    public void setIdProduto(int idProduto) {
+        this.idProduto = idProduto;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    @Override
+    public String toString() {
+        return "Movimentacao{" +
+                "idProduto=" + idProduto +
+                ", tipo='" + tipo + '\'' +
+                ", quantidade=" + quantidade +
+                '}';
+    }
+ 
     
      DefaultTableModel modelo = new DefaultTableModel(
         new Object[][]{},
@@ -40,7 +84,7 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
             fireTableCellUpdated(row, 2);
         }
     };
-     private MovimentacaoDAO movDAO;
+     private MovimentacaoVisao visaoMOV;
      
      public MovimentacaoVisao(String user, String password) {
         initComponents();
@@ -48,7 +92,7 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
         this.password = password;
         JTEstoque.setModel(modelo);
         carregarProdutos();
-        movDAO = new MovimentacaoDAO(user, password); // credenciais do banco
+        visaoMOV = new MovimentacaoVisao (user, password); // credenciais do banco
     }
         
 
@@ -228,7 +272,47 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
 
     private void JBConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBConfirmarActionPerformed
         
-    ProdutoDAO produtoDAO = new ProdutoDAO(user, password);
+    ProdutoDAO produtoDAO = new ProdutoDAO("root", "admin"); // usuário e senha do BD
+    MovimentacaoDAO movDAO = new MovimentacaoDAO("root", "admin");
+
+    for (int i = 0; i < modelo.getRowCount(); i++) {
+        String nomeProduto = (String) modelo.getValueAt(i, 0);
+        Boolean retirada = (Boolean) modelo.getValueAt(i, 1);
+        Boolean entrada = (Boolean) modelo.getValueAt(i, 2);
+        int qntAtual = (int) modelo.getValueAt(i, 3);
+        int qntEditada = (int) modelo.getValueAt(i, 4);
+
+        if ((retirada || entrada) && qntEditada > 0) {
+            // Buscar produto pelo nome para pegar ID
+            Produto p = produtoDAO.buscarPorNome(nomeProduto);
+            if (p == null) {
+                System.out.println("Produto não encontrado: " + nomeProduto);
+                continue;
+            }
+
+             String tipoMov = retirada ? "Saida" : "Entrada";
+                Movimentacao mov = new Movimentacao();
+                mov.setIdProduto(p.getId());
+                mov.setTipo(tipoMov);
+                mov.setQuantidade(qntEditada);
+
+                boolean sucessoMov = movDAO.inserirMovimentacao(mov);
+                if (sucessoMov) {
+                    int novaQtd = retirada ? qntAtual - qntEditada : qntAtual + qntEditada;
+                    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getId(), novaQtd);
+                    if (sucessoEstoque) {
+                        modelo.setValueAt(novaQtd, i, 3);
+                        modelo.setValueAt(false, i, 1);
+                        modelo.setValueAt(false, i, 2);
+                        modelo.setValueAt(0, i, 4);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Erro ao atualizar estoque para " + nomeProduto);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Erro ao salvar movimentação para " + nomeProduto);
+                }
+    }       }
+    
     
     String nomeProduto = JTProduto.getText().trim();
     String quantidadeStr = JTQuantidade.getText().trim();
