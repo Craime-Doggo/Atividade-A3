@@ -31,7 +31,7 @@ public class CadastroProduto extends javax.swing.JFrame {
     
     private void carregarCategorias() {
     // Ajuste “root” e “admin” para as credenciais do seu BD
-    dao = new CategoriaDAO(user, password);
+    CategoriaDAO dao = new CategoriaDAO(user, password);
     List<String> lista = dao.listarCategorias();
 
     // Limpa tudo que já estiver no JComboBox (se houver)

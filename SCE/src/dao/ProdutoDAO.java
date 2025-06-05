@@ -179,6 +179,16 @@ public class ProdutoDAO {
 
         try (Connection con = getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
+                if (rs.next()) {
+                    p = new Produto();
+                    p.setId(rs.getInt("Id"));
+                    p.setNome(rs.getString("Nome"));
+                    p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
+                    p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
+                    p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
+                    
+                    return p;
+                }
             ps.setString(1, nomeProduto);
             ResultSet rs = ps.executeQuery();
 
@@ -190,6 +200,8 @@ public class ProdutoDAO {
                 p.setEstoque_minimo(rs.getInt("Estoque_minimo"));
                 p.setEstoque_maximo(rs.getInt("Estoque_maximo"));
             }
+            return null;
+}
 
         } catch (SQLException e) {
             System.out.println("Erro ao buscar produto: " + e.getMessage());
