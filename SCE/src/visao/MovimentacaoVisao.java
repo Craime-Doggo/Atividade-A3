@@ -15,6 +15,8 @@ import produtos.Movimentacao;
  */
 public class MovimentacaoVisao extends javax.swing.JFrame {
     
+    private String user;
+    private String password;
     private int idProduto;
     private String tipo; // "entrada" ou "retirada"
     private int quantidade;
@@ -82,19 +84,19 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
             fireTableCellUpdated(row, 2);
         }
     };
-     private MovimentacaoDAO movDAO;
+     private MovimentacaoVisao visaoMOV;
      
      public MovimentacaoVisao() {
         initComponents();
         JTEstoque.setModel(modelo);
         carregarProdutos();
-        movDAO = new MovimentacaoDAO("root", "admin"); // credenciais do banco
+        visaoMOV = new MovimentacaoVisao (user, password); // credenciais do banco
     }
         
 
     
     private void carregarProdutos() {
-    ProdutoDAO produtoDAO = new ProdutoDAO ("root", "admin"); 
+    ProdutoDAO produtoDAO = new ProdutoDAO (user, password); 
     List <Produto> listaProdutos = produtoDAO.listarTodosProdutos(); // método que você cria para pegar todos os produtos
 
     modelo.setRowCount(0); // limpa tabela
