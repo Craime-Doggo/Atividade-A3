@@ -37,10 +37,6 @@ public class Master extends javax.swing.JFrame {
         MenuConsultaEdicao = new javax.swing.JMenu();
         ConsultaProduto = new javax.swing.JMenuItem();
         ConsultaCategoria = new javax.swing.JMenuItem();
-        MenuReajuste = new javax.swing.JMenu();
-        Reajuste = new javax.swing.JMenuItem();
-        MenuRelatorio = new javax.swing.JMenu();
-        Relatorio = new javax.swing.JMenuItem();
         MenuMovimentar = new javax.swing.JMenu();
         Movimentar = new javax.swing.JMenuItem();
 
@@ -88,35 +84,6 @@ public class Master extends javax.swing.JFrame {
 
         MenuBar.add(MenuConsultaEdicao);
 
-        MenuReajuste.setText("Reajuste");
-
-        Reajuste.setText("Reajuste");
-        Reajuste.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                ReajusteActionPerformed(evt);
-            }
-        });
-        MenuReajuste.add(Reajuste);
-
-        MenuBar.add(MenuReajuste);
-
-        MenuRelatorio.setText("Relatórios");
-        MenuRelatorio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                MenuRelatorioActionPerformed(evt);
-            }
-        });
-
-        Relatorio.setText("Relatórios");
-        Relatorio.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                RelatorioActionPerformed(evt);
-            }
-        });
-        MenuRelatorio.add(Relatorio);
-
-        MenuBar.add(MenuRelatorio);
-
         MenuMovimentar.setText("Movimentação");
 
         Movimentar.setText("Movimentação");
@@ -135,11 +102,11 @@ public class Master extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 356, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 277, Short.MAX_VALUE)
+            .addGap(0, 278, Short.MAX_VALUE)
         );
 
         pack();
@@ -165,23 +132,8 @@ public class Master extends javax.swing.JFrame {
         objeto.setVisible(true);
     }//GEN-LAST:event_ConsultaCategoriaActionPerformed
 
-    private void MenuRelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MenuRelatorioActionPerformed
-        Relatorio objeto = new Relatorio();
-        objeto.setVisible(true);
-    }//GEN-LAST:event_MenuRelatorioActionPerformed
-
-    private void RelatorioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RelatorioActionPerformed
-        Relatorio objeto = new Relatorio();
-        objeto.setVisible(true);
-    }//GEN-LAST:event_RelatorioActionPerformed
-
-    private void ReajusteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReajusteActionPerformed
-        Reajuste objeto = new Reajuste();
-        objeto.setVisible(true);
-    }//GEN-LAST:event_ReajusteActionPerformed
-
     private void MovimentarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MovimentarActionPerformed
-        MovimentacaoVisao objeto = new MovimentacaoVisao(user, password);
+        MovimentacaoVisao objeto = new MovimentacaoVisao (user, password);
         objeto.setVisible(true);
     }//GEN-LAST:event_MovimentarActionPerformed
 
@@ -236,10 +188,6 @@ public class Master extends javax.swing.JFrame {
     private javax.swing.JMenu MenuCadastro;
     private javax.swing.JMenu MenuConsultaEdicao;
     private javax.swing.JMenu MenuMovimentar;
-    private javax.swing.JMenu MenuReajuste;
-    private javax.swing.JMenu MenuRelatorio;
     private javax.swing.JMenuItem Movimentar;
-    private javax.swing.JMenuItem Reajuste;
-    private javax.swing.JMenuItem Relatorio;
     // End of variables declaration//GEN-END:variables
 }

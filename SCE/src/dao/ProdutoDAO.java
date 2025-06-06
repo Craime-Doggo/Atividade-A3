@@ -151,16 +151,16 @@ public class ProdutoDAO {
                 while (rs.next()) {
                     Produto p = new Produto();
                     p.setId(rs.getInt("Id"));
-                    p.setNome(rs.getString("Nome"));
+                    p.setNome(rs.getString("nome"));
                     p.setPreco(rs.getDouble("preco_unitario"));
                     p.setUnidade(rs.getString("Unidade"));
                     p.setQuantidade_estoque(rs.getInt("quantidade_estoque"));
-                        p.setEstoque_minimo(rs.getInt("quantidade_minima"));
+                    p.setEstoque_minimo(rs.getInt("quantidade_minima"));
                     p.setEstoque_maximo(rs.getInt("quantidade_maxima"));
                     
                     Categoria cat = new Categoria();
                     cat.setId_categoria(rs.getInt("categoria_id"));
-                    cat.setNome_categoria(rs.getString("nome_categoria"));
+                    //cat.setNome_categoria(rs.getString("nome_categoria"));
                     p.setCategoria(cat);
                     lista.add(p);
                 }
@@ -172,8 +172,8 @@ public class ProdutoDAO {
     }
 
     public Produto buscarPorNome(String nomeProduto) {
-        Produto p = new Produto();
-        String sql = "SELECT * FROM tb_produto WHERE Nome = ?";
+        Produto p = null;
+        String sql = "SELECT * FROM tb_produto WHERE nome = ?";
 
         try (Connection con = getConexao(); PreparedStatement ps = con.prepareStatement(sql)) {
 
@@ -287,7 +287,7 @@ public class ProdutoDAO {
             while (rs.next()) {
                 Produto p = new Produto();
                 p.setId(rs.getInt("Id"));
-                p.setNome(rs.getString("Nome"));
+                p.setNome(rs.getString("nome"));
                 p.setPreco (rs.getDouble ("preco_unitario"));
                 p.setUnidade(rs.getString("Unidade"));
                 p.setQuantidade_estoque(rs.getInt("Quantidade_estoque"));
@@ -305,4 +305,38 @@ public class ProdutoDAO {
 
         return lista;
     }
+               public List <Produto> listarTodos() {
+            List <Produto> lista = new ArrayList<>();
+
+            String sql = "SELECT * FROM tb_produto";
+
+            try (Connection conn = getConexao();
+                 PreparedStatement stmt = conn.prepareStatement(sql);
+                 ResultSet rs = stmt.executeQuery()) {
+
+                while (rs.next()) {
+                    Produto p = new Produto();
+                    p.setId(rs.getInt("id"));
+                    p.setNome(rs.getString("nome"));
+                    p.setQuantidade_estoque(rs.getInt("quantidade_estoque"));
+                    p.setPreco(rs.getDouble("preco_unitario"));
+                    p.setUnidade(rs.getString("unidade"));
+                    p.setEstoque_minimo(rs.getInt("quantidade_minima"));
+                    p.setEstoque_maximo(rs.getInt("quantidade_maxima"));
+                    p.setId_categoria(rs.getInt("categoria_id"));
+                    //p.setNome_categoria(rs.getString("nome_categoria"));
+                    //p.setTamanho(rs.getString("tamanho"));
+                    //p.setEmbalagem(rs.getString("embalagem"));
+                    lista.add(p);
+                }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+    }
+
+    return lista;
+}
+
+
+        
 }
