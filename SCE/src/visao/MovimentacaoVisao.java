@@ -5,7 +5,7 @@ import javax.swing.table.DefaultTableModel;
 import produtos.Produto;
 import dao.ProdutoDAO;
 import java.util.List;
-import dao.MovimentacaoDAO;
+//import dao.MovimentacaoDAO;
 import produtos.Movimentacao;
 
 
@@ -20,6 +20,33 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
     private int idProduto;
     private String tipo; // "entrada" ou "retirada"
     private int quantidade;
+   
+    ProdutoDAO produtoDAO = new ProdutoDAO(user, password);
+
+
+        private void limparCampos() {
+        JTProduto.setText("");
+        JTQuantidade.setText("");
+        // Outros campos se existirem
+    }
+
+
+        public void atualizarTabelaEstoqueComMovimento (String nomeMovimentado, int quantidadeMovida) {
+            ProdutoDAO dao = new ProdutoDAO(user, password);
+            List<Produto> lista = dao.listarTodos();
+
+            DefaultTableModel modelo = (DefaultTableModel) JTEstoque.getModel();
+            modelo.setRowCount(0); // Limpando a tabela
+
+            for (Produto p : lista) {
+                modelo.addRow(new Object[]{
+                    p.getNome(),
+                    p.getQuantidade_estoque(),
+                    0 
+                });
+            }
+        }
+
   
 
     public MovimentacaoVisao (int idProduto, String tipo, int quantidade) {
@@ -64,25 +91,16 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
     
      DefaultTableModel modelo = new DefaultTableModel(
         new Object[][]{},
-        new String[]{"Produto", "Retirada", "Entrada", "QntAtual", "QntEditada"}
+        new String[]{"Produto", "Quantiade-Estoque", "Adicionado ou Retirado"}
     ) {  @Override
         public Class<?> getColumnClass(int columnIndex) {
-            if (columnIndex == 1 || columnIndex == 2) return Boolean.class;
-            if (columnIndex == 3 || columnIndex == 4) return Integer.class;
+            if (columnIndex == 1 || columnIndex == 2) return Integer.class;
             return String.class;
         }   @Override
-        public boolean isCellEditable(int row, int column) {
-            return column == 1 || column == 2 || column == 4;
+         public boolean isCellEditable(int row, int column) {
+            return column == 2;
         }
-        
-        @Override
-        public void setValueAt(Object aValue, int row, int column) {
-            super.setValueAt(aValue, row, column);
-            if (column == 1 && (Boolean) aValue) super.setValueAt(false, row, 2);
-            if (column == 2 && (Boolean) aValue) super.setValueAt(false, row, 1);
-            fireTableCellUpdated(row, 1);
-            fireTableCellUpdated(row, 2);
-        }
+       
     };
      private MovimentacaoVisao visaoMOV;
      
@@ -133,8 +151,9 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
         JLQuantidade = new javax.swing.JLabel();
         JTQuantidade = new javax.swing.JTextField();
         JLEditar = new javax.swing.JLabel();
-        JCRetiraAdicionar = new javax.swing.JComboBox<>();
         JBConfirmar = new javax.swing.JButton();
+        JBRetirar = new javax.swing.JButton();
+        JBAdicionar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Movimento de Estoque");
@@ -169,6 +188,11 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
         JBProcurar.setText("Procurar");
 
         JBVoltar.setText("Voltar");
+        JBVoltar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBVoltarActionPerformed(evt);
+            }
+        });
 
         JLQuantidade.setText("Quantidade:");
 
@@ -180,17 +204,24 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
 
         JLEditar.setText("Retirar/Adicionar:");
 
-        JCRetiraAdicionar.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Retirada", "Entrada", " " }));
-        JCRetiraAdicionar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                JCRetiraAdicionarActionPerformed(evt);
-            }
-        });
-
         JBConfirmar.setText("Confirmar");
         JBConfirmar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 JBConfirmarActionPerformed(evt);
+            }
+        });
+
+        JBRetirar.setText("Retirar");
+        JBRetirar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBRetirarActionPerformed(evt);
+            }
+        });
+
+        JBAdicionar.setText("Adicionar");
+        JBAdicionar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                JBAdicionarActionPerformed(evt);
             }
         });
 
@@ -219,9 +250,11 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(JLEditar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(JCRetiraAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(196, 196, 196))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(JBRetirar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(49, 49, 49)
+                        .addComponent(JBAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(41, 41, 41))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -240,14 +273,15 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
                     .addComponent(JTProduto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(32, 32, 32)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 29, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JTQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(JLQuantidade, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(JLEditar)
-                    .addComponent(JCRetiraAdicionar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(JBRetirar)
+                    .addComponent(JBAdicionar)
+                    .addComponent(JLEditar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(JBConfirmar)
@@ -266,57 +300,10 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_JTQuantidadeActionPerformed
 
-    private void JCRetiraAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JCRetiraAdicionarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_JCRetiraAdicionarActionPerformed
-
     private void JBConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBConfirmarActionPerformed
-        
-    ProdutoDAO produtoDAO = new ProdutoDAO("root", "admin"); // usuário e senha do BD
-    MovimentacaoDAO movDAO = new MovimentacaoDAO("root", "admin");
-
-    for (int i = 0; i < modelo.getRowCount(); i++) {
-        String nomeProduto = (String) modelo.getValueAt(i, 0);
-        Boolean retirada = (Boolean) modelo.getValueAt(i, 1);
-        Boolean entrada = (Boolean) modelo.getValueAt(i, 2);
-        int qntAtual = (int) modelo.getValueAt(i, 3);
-        int qntEditada = (int) modelo.getValueAt(i, 4);
-
-        if ((retirada || entrada) && qntEditada > 0) {
-            // Buscar produto pelo nome para pegar ID
-            Produto p = produtoDAO.buscarPorNome(nomeProduto);
-            if (p == null) {
-                System.out.println("Produto não encontrado: " + nomeProduto);
-                continue;
-            }
-
-             String tipoMov = retirada ? "Saida" : "Entrada";
-                Movimentacao mov = new Movimentacao();
-                mov.setIdProduto(p.getId());
-                mov.setTipo(tipoMov);
-                mov.setQuantidade(qntEditada);
-
-                boolean sucessoMov = movDAO.inserirMovimentacao(mov);
-                if (sucessoMov) {
-                    int novaQtd = retirada ? qntAtual - qntEditada : qntAtual + qntEditada;
-                    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getId(), novaQtd);
-                    if (sucessoEstoque) {
-                        modelo.setValueAt(novaQtd, i, 3);
-                        modelo.setValueAt(false, i, 1);
-                        modelo.setValueAt(false, i, 2);
-                        modelo.setValueAt(0, i, 4);
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Erro ao atualizar estoque para " + nomeProduto);
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Erro ao salvar movimentação para " + nomeProduto);
-                }
-    }       }
-    
-    
-    String nomeProduto = JTProduto.getText().trim();
+        ProdutoDAO produtoDAO = new ProdutoDAO(user, password);
+     String nomeProduto = JTProduto.getText().trim();
     String quantidadeStr = JTQuantidade.getText().trim();
-    int operacaoSelecionada = JCRetiraAdicionar.getSelectedIndex(); // 0 = Retirada, 1 = Entrada
 
     if (nomeProduto.isEmpty() || quantidadeStr.isEmpty()) {
         JOptionPane.showMessageDialog(this, "Preencha o nome do produto e a quantidade.");
@@ -326,50 +313,123 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
     int quantidade;
     try {
         quantidade = Integer.parseInt(quantidadeStr);
-        if (quantidade <= 0) throw new NumberFormatException();
     } catch (NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Quantidade inválida.");
         return;
     }
 
-    Produto p = produtoDAO.buscarPorNome(nomeProduto);
-    if (p == null) {
+    //ProdutoDAO produtoDAO = new ProdutoDAO(user, password);
+    Produto produto = produtoDAO.buscarPorNome(nomeProduto);
+
+    if (produto == null) {
         JOptionPane.showMessageDialog(this, "Produto não encontrado.");
         return;
     }
 
-    int qntAtual = p.getQuantidade_estoque();
-    int novaQtd = operacaoSelecionada == 0 ? qntAtual - quantidade : qntAtual + quantidade;
+    // Determinar se é adição ou retirada com base no botão selecionado
+    int novaQuantidade = produto.getQuantidade_estoque();
+    boolean foiAdicionado = false;
 
-    if (novaQtd < 0) {
-        JOptionPane.showMessageDialog(this, "A retirada ultrapassa o estoque atual.");
-        return;
+    // Lógica baseada no último botão clicado
+    if (quantidade > 0) {
+        if (quantidadeStr.startsWith("-")) {
+            // Retirada
+            quantidade = Math.abs(quantidade);
+            if (novaQuantidade < quantidade) {
+                JOptionPane.showMessageDialog(this, "Estoque insuficiente.");
+                return;
+            }
+            novaQuantidade -= quantidade;
+        } else {
+            // Adição
+            novaQuantidade += quantidade;
+            foiAdicionado = true;
+            }
     }
+              produto.setQuantidade_estoque(novaQuantidade);
+                produtoDAO.atualizarEstoque(idProduto, quantidade);
 
-    boolean sucessoEstoque = produtoDAO.atualizarEstoque(p.getId(), novaQtd);
-    if (sucessoEstoque) {
-        JOptionPane.showMessageDialog(this, "Estoque atualizado com sucesso.");
+             atualizarTabelaEstoqueComMovimento(nomeProduto, quantidade);
 
-        // Atualiza a tabela
+        // Atualizar tabela
         for (int i = 0; i < modelo.getRowCount(); i++) {
-            if (modelo.getValueAt(i, 0).equals(nomeProduto)) {
-                modelo.setValueAt(novaQtd, i, 3); // atualiza QntAtual
-                modelo.setValueAt(0, i, 4);        // limpa QntEditada
-                modelo.setValueAt(false, i, 1);    // desmarca Retirada
-                modelo.setValueAt(false, i, 2);    // desmarca Entrada
+            String nomeNaTabela = modelo.getValueAt(i, 0).toString();
+            if (nomeNaTabela.equalsIgnoreCase(nomeProduto)) {
+                modelo.setValueAt(novaQuantidade, i, 1); // Atualiza Quantidade-Estoque
+                modelo.setValueAt((foiAdicionado ? quantidade : -quantidade), i, 2); // Mostra quantidade adicionada ou retirada
                 break;
             }
+        JOptionPane.showMessageDialog(this, "Movimentação realizada com sucesso!");
+        limparCampos();
         }
+    }//GEN-LAST:event_JBConfirmarActionPerformed
 
-        // Limpa os campos
-        JTProduto.setText("");
-        JTQuantidade.setText("");
-        JCRetiraAdicionar.setSelectedIndex(0);
+    private void JBRetirarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBRetirarActionPerformed
+       String nomeProduto = JTProduto.getText().trim();
+       ProdutoDAO produtoDAO = new ProdutoDAO(user, password);
+        Produto produto = produtoDAO.buscarPorNome(nomeProduto);
+
+    if (produto != null) {
+        try {
+            int quantidade = Integer.parseInt(JTQuantidade.getText());
+
+            if (quantidade <= 0) {
+                JOptionPane.showMessageDialog(this, "Digite uma quantidade positiva.");
+                return;
+            }
+
+            // Atualiza valor na tabela
+                atualizarTabelaEstoqueComMovimento(nomeProduto, quantidade);
+
+            for (int i = 0; i < JTEstoque.getRowCount(); i++) {
+                String nomeTabela = JTEstoque.getValueAt(i, 0).toString();
+                if (nomeTabela.equals(produto.getNome())) {
+                    JTEstoque.setValueAt(quantidade, i, 2); // Mostra o quanto foi adicionado/retirado
+                    break;
+                }
+            }
+            if (produto.getQuantidade_estoque() >= quantidade) {
+                produto.setQuantidade_estoque(produto.getQuantidade_estoque() - quantidade);
+                produtoDAO.atualizarEstoque(idProduto, quantidade);
+                atualizarTabelaEstoqueComMovimento(nomeProduto, -quantidade); // negativo para representar retirada
+            } else {
+                JOptionPane.showMessageDialog(this, "Estoque insuficiente para retirada.");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Digite uma quantidade válida.");
+        }
     } else {
-        JOptionPane.showMessageDialog(this, "Erro ao atualizar estoque no banco.");
+        JOptionPane.showMessageDialog(this, "Produto não encontrado.");
     }
 
-    }//GEN-LAST:event_JBConfirmarActionPerformed
+    }//GEN-LAST:event_JBRetirarActionPerformed
+
+    private void JBAdicionarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBAdicionarActionPerformed
+        String nomeProduto = JTProduto.getText().trim();
+       //String quantidadeTexto = JTQuantidade.getText().trim();
+        ProdutoDAO produtoDAO = new ProdutoDAO(user, password);
+        Produto produto = produtoDAO.buscarPorNome(nomeProduto); // <-- IMPORTANTE
+
+            if (produto != null) {
+      int quantidadeTexto = Integer.parseInt(JTQuantidade.getText());
+      
+        if (produto.getQuantidade_estoque() >= quantidadeTexto) {
+            produto.setQuantidade_estoque(produto.getQuantidade_estoque() - quantidadeTexto);
+            produtoDAO.atualizarEstoque(idProduto, quantidade);
+            atualizarTabelaEstoqueComMovimento(nomeProduto, quantidadeTexto);
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Estoque insuficiente para retirada.");
+        }
+    } else {
+        JOptionPane.showMessageDialog(this, "Produto não encontrado.");
+    }
+
+    }//GEN-LAST:event_JBAdicionarActionPerformed
+
+    private void JBVoltarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBVoltarActionPerformed
+       this.dispose();
+    }//GEN-LAST:event_JBVoltarActionPerformed
 
   
     public static void main(String args[]) {
@@ -404,10 +464,11 @@ public class MovimentacaoVisao extends javax.swing.JFrame {
         });
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton JBAdicionar;
     private javax.swing.JButton JBConfirmar;
     private javax.swing.JButton JBProcurar;
+    private javax.swing.JButton JBRetirar;
     private javax.swing.JButton JBVoltar;
-    private javax.swing.JComboBox<String> JCRetiraAdicionar;
     private javax.swing.JLabel JLEditar;
     private javax.swing.JLabel JLQuantidade;
     private javax.swing.JTable JTEstoque;
